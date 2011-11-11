@@ -1,0 +1,122 @@
+# You may add here your
+# server {
+#	...
+# }
+# statements for each of your virtual hosts
+
+server {
+
+	listen   80; ## listen for ipv4
+
+	server_name s2173-4.ing.puc.cl;
+
+	access_log  /var/log/nginx/localhost.access.log;
+
+	root /var/www/entangle;
+
+	location / {
+		index  index.php;
+	}
+
+		# enforce NO www
+	if ($host ~* ^www\.(.*))
+	{
+		set $host_without_www $1;
+		rewrite ^/(.*)$ $scheme://$host_without_www/$1 permanent;
+	}
+ 
+	# canonicalize codeigniter url end points
+	# if your default controller is something other than "welcome" you should change the following
+	if ($request_uri ~* ^(/welcome(/index)?|/index(.php)?)/?$)
+	{
+		rewrite ^(.*)$ / permanent;
+	}
+ 
+	# removes trailing "index" from all controllers
+	if ($request_uri ~* index/?$)
+	{
+		rewrite ^/(.*)/index/?$ /$1 permanent;
+	}
+ 
+	# removes trailing slashes (prevents SEO duplicate content issues)
+	if (!-d $request_filename)
+	{
+		rewrite ^/(.+)/$ /$1 permanent;
+	}
+ 
+	# removes access to "system" folder, also allows a "System.php" controller
+	if ($request_uri ~* ^/system)
+	{
+		rewrite ^/(.*)$ /index.php?/$1 last;
+		break;
+	}
+ 
+	# unless the request is for a valid file (image, js, css, etc.), send to bootstrap
+	if (!-e $request_filename)
+	{
+		rewrite ^/(.*)$ /index.php?/$1 last;
+		break;
+	}
+
+	#error_page  404  /404.html;
+
+	# redirect server error pages to the static page /50x.html
+	#
+	#error_page   500 502 503 504  /50x.html;
+	#location = /50x.html {
+	#	root   /var/www/nginx-default;
+	#}
+
+	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+	#
+	location ~ \.php$ {
+		fastcgi_pass   127.0.0.1:9000;
+		fastcgi_index  index.php;
+		fastcgi_param  SCRIPT_FILENAME  /var/www/entangle/$fastcgi_script_name;
+		include fastcgi_params;
+	}
+
+	# deny access to .htaccess files, if Apache's document root
+	# concurs with nginx's one
+	#
+	location ~ /\.ht {
+		deny  all;
+	}
+}
+
+
+# another virtual host using mix of IP-, name-, and port-based configuration
+#
+#server {
+#listen   8000;
+#listen   somename:8080;
+#server_name  somename  alias  another.alias;
+
+#location / {
+#root   html;
+#index  index.html index.htm;
+#}
+#}
+
+
+# HTTPS server
+#
+#server {
+#listen   443;
+#server_name  localhost;
+
+#ssl  on;
+#ssl_certificate  cert.pem;
+#ssl_certificate_key  cert.key;
+
+#ssl_session_timeout  5m;
+
+#ssl_protocols  SSLv3 TLSv1;
+#ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
+#ssl_prefer_server_ciphers   on;
+
+#location / {
+#root   html;
+#index  index.html index.htm;
+#}
+#}

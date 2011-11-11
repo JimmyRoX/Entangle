@@ -18,13 +18,6 @@ server {
 		index  index.php;
 	}
 
-		# enforce NO www
-	if ($host ~* ^www\.(.*))
-	{
-		set $host_without_www $1;
-		rewrite ^/(.*)$ $scheme://$host_without_www/$1 permanent;
-	}
- 
 	# canonicalize codeigniter url end points
 	# if your default controller is something other than "welcome" you should change the following
 	if ($request_uri ~* ^(/welcome(/index)?|/index(.php)?)/?$)

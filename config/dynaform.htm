@@ -32,15 +32,9 @@
         Contribuciones <a href="#" id="add_contrib">+</a> </h2>
     
     <script type="text/javascript">
-
-        
-        $('#add_contrib').click(function (ev) {
-            //var count = $('#contrib .contrib').length;
-            $('#contrib').append(add_contribfields());
-            //$('#contrib').append(gen_contribfields(count));
-        });
-
+        $('#add_contrib').click(add_contribfields);
     </script>
+    
     <div id="contrib">
         
     </div>

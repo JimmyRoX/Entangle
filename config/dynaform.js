@@ -37,8 +37,9 @@ function add_contribfields()
         get_addref_function(ref_list)
     );
     
+    $('#contrib').append(container);
 
-    return container;
+    return false;
     
 }
 
@@ -62,6 +63,8 @@ function get_addmeta_function(meta_list)
             });
 
             meta_list.append(meta);
+
+            return false;
         }
 }
 
@@ -99,5 +102,7 @@ function get_addref_function(ref_list)
             );
 
             ref_list.append(ref);
+
+            return false;
         }
 }

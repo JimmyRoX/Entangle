@@ -8,7 +8,7 @@
     <script type="text/javascript" src="<?php echo base_url('script/dynaform.js') ?>">
 
     </script>
-    <form action="<?php echo base_url('modelo') ?>" method="get">
+    <form action="<?php echo base_url('modelo') ?>" method="post">
     <h1>
         Agregar Modelo</h1>
     <input type="submit" title="hai" >

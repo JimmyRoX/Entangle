@@ -8,12 +8,17 @@ class Modelo extends CI_Controller {
 		
 		$m = new Mongo();
 		$this->db = $m->entangle;
+		$this->modelos = $this->db->modelos;
 	}
 
 	public function index()
 	{
-		$data = $this->input->get();
+		$data = $this->input->post();
+
+		//$this->model->add_record($data);
+		$this->modelos->insert($data);
 		print_r($data);
+		
 		//$this->load->view("modelo", $data);
 	}
 

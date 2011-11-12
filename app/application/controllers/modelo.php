@@ -13,15 +13,16 @@ class Modelo extends CI_Controller {
 
 	public function index()
 	{
-		show();
+		$this->show();
 	}
 
 	public function add()
 	{
 		if($this->input->post('add'))
 		{
+			$data = $this->input->post();
 			$this->modelos->insert($data);
-			redirect(base_url('modelo'));	
+			redirect('modelo');	
 			return;
 		}
 

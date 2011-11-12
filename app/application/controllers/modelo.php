@@ -30,9 +30,28 @@ class Modelo extends CI_Controller {
 		$this->load->view('add_modelo.php', $data);
 	}
 
+	public function show()
+	{
+		$modelos = $this->modelos->find();
+
+		$list = array();
+
+		foreach($modelos as $m)
+		{
+			$list[] = array('nombre' => $m['nombre']);
+
+		} 
+
+		$this->load->view('list_modelo', array('modelo' => $list));
+
+	}
+
 	public function view($name)
 	{
-		
+		if($name) {
+			$modelo = $this->modelos->findOne( array('nombre' => $name));
+			$this->load->view('view_modelo', array('modelo' => $modelo));
+		}
 	}
 
 }

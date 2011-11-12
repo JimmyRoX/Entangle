@@ -29,19 +29,33 @@ class Model extends CI_Controller {
 		$contributions = array();
 
 		$i = 0;
-		$j = 0;
 		while($this->input->post("c$i._name"))
 		{
 			$contribution = array('name'=>$this->input->post("c$i._name"));
 			$metadata = array();
+
+			$j = 0;
 			while($this->input->post("c$i._meta$j._name"))
 			{
 				$metadata[$this->input->post("c$i._meta$j._name")] = $this->input->post("c$i._meta$j._value");
 				$j++;
 			}
 			$contribution['metadata'] = $metadata;
-			$j = 0;
+			
 			array_push($contributions, $contribution);
+			
+
+			$referencias = array();
+			$k = 0;
+			while($this->input->post("c$i._ref$k._name"))
+			{
+				$referencias[$this->input->post("c$i._meta$k._name")] = $this->input->post("c$i._meta$k._value");
+				$k++;
+			}
+
+			$i++;
+			
+
 		}
 		
 		$data = array(
@@ -51,7 +65,8 @@ class Model extends CI_Controller {
 			
 			
 		);
-		$this->model_model->add($data);
+		//$this->model_model->add($data);
+		$this->models->insert($data);
 	}
 }
 

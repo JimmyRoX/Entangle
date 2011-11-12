@@ -31,7 +31,7 @@ return $('<div> \
     <label> \
         <input type="text" name="' + parent_id + '[metadata][' + count + '][name]" /></label>  \
             <label>tipo \
-                <select name="' + parent_id + '[metadata][' + count + '][name]"> \
+                <select name="' + parent_id + '[metadata][' + count + '][type]"> \
                     <option value="text">texto</option> \
                     <option value="number">número</option> \
                     <option value="datetime">fecha/hora</option> \

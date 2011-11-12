@@ -9,9 +9,9 @@ function add_contribfields()
     $.map(container.find('input'), function(e, i)
         {
             e = $(e);
-            var input_id = id + '-' + e.attr('name');
+            var input_id = id + '-' + e.attr('nombre');
             e.attr('id', input_id);
-            e.attr('name', input_id.replace(re_field_id,'[$1]'));
+            e.attr('nombre', input_id.replace(re_field_id,'[$1]'));
         }
     );
 
@@ -57,9 +57,9 @@ function get_addmeta_function(meta_list)
             $.map(meta.find('input,select'), function(e, i)
                 {
                     e = $(e);
-                    var input_id = meta_id + '-' + e.attr('name');
+                    var input_id = meta_id + '-' + e.attr('nombre');
                     e.attr('id', input_id);
-                    e.attr('name', input_id.replace(re_field_id,'[$1]'));
+                    e.attr('nombre', input_id.replace(re_field_id,'[$1]'));
             });
 
             meta_list.append(meta);
@@ -83,9 +83,9 @@ function get_addref_function(ref_list)
             $.map(ref.find('input,select'), function(e, i)
                 {
                     e = $(e);
-                    var input_id = ref_id + '-' + e.attr('name');
+                    var input_id = ref_id + '-' + e.attr('nombre');
                     e.attr('id', input_id);
-                    e.attr('name', input_id.replace(re_field_id,'[$1]'));
+                    e.attr('nombre', input_id.replace(re_field_id,'[$1]'));
             });
 
 

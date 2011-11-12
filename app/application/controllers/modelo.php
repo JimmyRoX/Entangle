@@ -13,17 +13,18 @@ class Modelo extends CI_Controller {
 
 	public function index()
 	{
-		$data = $this->input->post();
-
-		//$this->model->add_record($data);
-		$this->modelos->insert($data);
-		print_r($data);
-		
-		//$this->load->view("modelo", $data);
+		show();
 	}
 
 	public function add()
 	{
+		if($this->input->post('add'))
+		{
+			$this->modelos->insert($data);
+			redirect(base_url('modelo'));	
+			return;
+		}
+
 		$data = array();
 		$data['admin'] = array('hugo', 'paco', 'luis');
 

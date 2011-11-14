@@ -9,9 +9,9 @@ function add_contribfields()
     $.map(container.find('input'), function(e, i)
         {
             e = $(e);
-            var input_id = id + '-' + e.attr('nombre');
+            var input_id = id + '-' + e.attr('name');
             e.attr('id', input_id);
-            e.attr('nombre', input_id.replace(re_field_id,'[$1]'));
+            e.attr('name', input_id.replace(re_field_id,'[$1]'));
         }
     );
 
@@ -37,6 +37,7 @@ function add_contribfields()
         get_addref_function(ref_list)
     );
     
+    container.find('.delete').click(function(e) { container.remove() } );
     $('#contrib').append(container);
 
     return false;
@@ -57,13 +58,15 @@ function get_addmeta_function(meta_list)
             $.map(meta.find('input,select'), function(e, i)
                 {
                     e = $(e);
-                    var input_id = meta_id + '-' + e.attr('nombre');
+                    var input_id = meta_id + '-' + e.attr('name');
                     e.attr('id', input_id);
-                    e.attr('nombre', input_id.replace(re_field_id,'[$1]'));
+                    e.attr('name', input_id.replace(re_field_id,'[$1]'));
             });
 
-            meta_list.append(meta);
+            meta.find('.delete').click(function(e){ meta.remove() });
 
+            meta_list.append(meta);
+            
             return false;
         }
 }
@@ -83,9 +86,9 @@ function get_addref_function(ref_list)
             $.map(ref.find('input,select'), function(e, i)
                 {
                     e = $(e);
-                    var input_id = ref_id + '-' + e.attr('nombre');
+                    var input_id = ref_id + '-' + e.attr('name');
                     e.attr('id', input_id);
-                    e.attr('nombre', input_id.replace(re_field_id,'[$1]'));
+                    e.attr('name', input_id.replace(re_field_id,'[$1]'));
             });
 
 
@@ -94,12 +97,10 @@ function get_addref_function(ref_list)
             var add_meta = meta_list.find('legend a');
 
             meta_list.attr('id', meta_list_id);
-            
-            console.log(meta_list);
+        
+            add_meta.click( get_addmeta_function(meta_list) );
 
-            add_meta.click(
-                get_addmeta_function(meta_list)
-            );
+            ref.find('.delete').click(function(e) { ref.remove() });
 
             ref_list.append(ref);
 

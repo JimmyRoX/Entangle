@@ -14,13 +14,31 @@
     <div id="contrib">
         <?php foreach($modelo['contrib'] as $contrib): ?>
             <fieldset class="contrib"><legend>contribución</legend>
-                <div>nombre: <?php echo $contrib['name']; ?> &nbsp; template: <?php echo $contrib['template'] ?></div>
+                <div>nombre: <?php echo $contrib['nombre']; ?> &nbsp; template: <?php echo $contrib['template'] ?></div>
                 <fieldset>
-                <label>metadata <a href="#"></label>
+                <legend>metadata</legend>
 
                 <?php foreach($contrib['metadata'] as $meta): ?>
-                    <div> <?php echo $meta['type']?> <?php echo $meta['name'] ?></div>
+                    <div> <?php echo $meta['tipo']?> <em><?php echo $meta['nombre'] ?></em></div>
                 <?php endforeach; ?>
+                </fieldset>
+
+                <fieldset>
+                    <legend>referencias</legend>
+
+
+                <?php foreach($contrib['ref'] as $ref): ?>
+                    <div>  <?php echo $ref['nombre']?> → <?php echo $ref['tipo_dest']?> [<?php echo $ref['template'] ?>]</div>
+                <?php endforeach; ?>
+
+                    <fieldset>
+                        <legend>metadata</legend>
+
+                    <?php foreach($ref['metadata'] as $meta): ?>
+                        <div> <?php echo $meta['tipo']?> <em><?php echo $meta['nombre'] ?></em></div>
+                    <?php endforeach; ?>
+                    </fieldset>
+
                 </fieldset>
             </fieldset>            
         <?php endforeach; ?>

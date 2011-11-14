@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Untitled Page</title>
+    <title><?php echo $title ?></title>
 </head>
 <body>
     <script type="text/javascript" src="<?php echo base_url('script/jquery-1.7.min.js') ?>"></script>
@@ -9,19 +9,18 @@
 
 
     <form action="<?php echo base_url('modelo/add') ?>" method="post">
-    <h1>
-        Agregar Modelo</h1>
+    <h1><?php echo $title ?></h1>
     <input type="submit" name="add" value="Crear">
     <p>
         <label>
             nombre
-            <input type="text" name="nombre" >
+            <input type="text" name="nombre" required>
         </label>
     </p>
     <p>
         <label>
             admin
-            <select name="admin[]" multiple>
+            <select name="admin[]" multiple required>
             <?php foreach($admin as $name): ?>
                 <option><?php echo($name); ?></option>
             <?php endforeach; ?>
@@ -45,8 +44,8 @@
 
 
         <fieldset class="contrib"><legend>contribución</legend><p>
-            <label>nombre<input type="text" name="nombre" /></label>
-            <label>template<input type="text" name="template" /></label></p>
+            <label>nombre<input type="text" name="nombre" required /></label>
+            <label>template<input type="text" name="template" required/></label></p>
             <fieldset class="metadata">
                 <legend>metadata <a href="#">+</a></legend>
 
@@ -59,22 +58,22 @@
 
 
         <div class="metadata">
-        <label>nombre<input type="text" name="nombre" /></label>
+        <label>nombre<input type="text" name="nombre" required/></label>
         <label>tipo
-                <select name="tipo"> 
+                <select name="tipo" required> 
                     <option value="text">texto</option> 
                     <option value="number">número</option> 
                     <option value="datetime">fecha/hora</option> 
                     <option value="url">url</option>
-                    <option     value="file">archivo</option>
+                    <option value="file">archivo</option>
                 </select>
         </label>
         </div>
 
         <fieldset class="ref">
-            <label>nombre <input type="text" name="nombre"></label>
-            <label>tipo destino <input type="text" name="tipo_dest"></label>
-            <label>template <input type="text" name="template"></label>
+            <label>nombre <input type="text" name="nombre" required></label>
+            <label>tipo destino <input type="text" name="tipo_dest" required></label>
+            <label>template <input type="text" name="template" required></label>
             <fieldset class="metadata">
                 <legend>metadata <a href="#">+</a></legend>
             </fieldset>

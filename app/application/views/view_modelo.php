@@ -28,7 +28,7 @@
 
 
                 <?php foreach($contrib['ref'] as $ref): ?>
-                    <div>  <?php echo $ref['nombre']?> → <?php echo $ref['tipo_dest']?> [<?php echo $ref['template'] ?>]</div>
+                    <div>  <?php echo $ref['nombre']?> &#x2192; <?php echo $ref['tipo_dest']?> [<?php echo $ref['template'] ?>]</div>
                 <?php endforeach; ?>
 
                     <fieldset>
@@ -44,5 +44,6 @@
         <?php endforeach; ?>
     </div>
     </form>
+    &#x2603;
 </body>
 </html>

@@ -21,7 +21,18 @@ class Modelo extends CI_Controller {
 		if($this->input->post('add'))
 		{
 			$data = $this->input->post();
-			$this->modelos->insert($data);
+
+			$modelo = array();
+			$modelo['nombre'] = $data['nombre'];
+			$modelo['admin'] = $data['admin'];
+
+			foreach($data['contrib'] as $contrib)
+			{
+				$c = array();
+				$c['nombre'] = $contrib['nombre'];
+			}
+
+			$this->modelos->insert($modelo);
 			redirect('modelo');	
 			return;
 		}

@@ -14,15 +14,8 @@
     
 	<script>
 	$(function() {
-		$( "#tabs" ).tabs({
-			ajaxOptions: {
-				error: function( xhr, status, index, anchor ) {
-					$( anchor.hash ).html(
-						"Couldn't load this tab. We'll try to fix this as soon as possible. " +
-						"If this wouldn't be a demo." );
-				}
-			}
-		});
+		$( "#sortable" ).sortable();
+		$( "#sortable" ).disableSelection();
 	});
 		
 	</script>
@@ -30,20 +23,19 @@
 </head>
 <body>
 <table width="100%">
+<tr><td><div id="Principal_Overview">Aca va El contenido Principal</div>
 
-
-<tr><td colspan="2"><div id="tabs">
-	<ul>
-		<li><a href="<?php echo base_url();?>index.php/widget/content" title="Principal Overview"><span>Content 1</span></a></li>
-		<li><a href="<?php echo base_url();?>index.php/model/index" title="Principal Overview">Modelo</a></li>
-		<li><a href="<?php echo base_url();?>index.php/model/index" title="Principal Overview"><span>Modelo 2</span></a></li>
-
-	</ul>
-</div>
-</td></tr>
-</table>
+</td>
+<td width="400px">
+<ul id="sortable">
+	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Cosa de Navegacion</li>
+	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Usuarios Conectados</li>
+	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Artículos Relacionados</li>
+</ul>
+</td></tr></table>
 
 
 </body>
 </html>
+
 

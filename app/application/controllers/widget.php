@@ -6,5 +6,9 @@ class Widget extends CI_Controller
 		$this->load->view('class_widget');
 
 	}
+	function content() 
+	{
+		$this->load->view('content_widget');
+	}
 }
 

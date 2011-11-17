@@ -49,6 +49,27 @@
 		    //prevent the browser to follow the link
 		    		    return false;
 		});
+		$('a.articlePopup').live('click', function() {
+		    var url = this.href;
+		    var mainTab = $("#Principal_Overview");
+		    $("#dialog").dialog('close');
+		    //if ($("#dialog").length == 0) {
+		        //dialog = $('<div id="dialog"></div>').appendTo('body');
+		    //} 
+		    //var y = jQuery(this).position().bottom;
+		    
+		    // load remote content
+		    mainTab.load(
+		            url,
+		            {},
+		            function(responseText, textStatus, XMLHttpRequest) {
+
+		            }
+		        );
+		    //prevent the browser to follow the link
+		    return false;
+		});
+
 		
 		$( "a.articlePopup" ).mouseleave(function() {
 			$( "#dialog" ).dialog( "close" );

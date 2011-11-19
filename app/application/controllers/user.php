@@ -2,15 +2,13 @@
 
 	class User extends CI_Controller{
 		
-		public function __construct()
-		{
+		public function __construct(){
 			parent::__construct();
 			
 			//cargar librería, helper y modelo.
 			$this->load->library(array('table','validation'));
 			$this->load->helper('url');
 			$this->load->model('user_model','',TRUE);
-		
 		}
 		
 		function index(){

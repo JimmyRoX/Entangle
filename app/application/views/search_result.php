@@ -7,9 +7,10 @@
 	</head>
 	
 	<body>
+	<h2>Resultados de la Busqueda de Cursos:</h2>
 		<?php 
 		//Para cada instancia
-		 foreach($result as $instancia)
+		 foreach($cursor as $instancia)
 		 {
 			 echo '<div>';
 			 echo '<p><em>Modelo: '.$instancia['nombre'].'</em></p>';

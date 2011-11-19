@@ -1,9 +1,9 @@
 <?php
 class Search extends CI_Controller
 {
-	public function __constructor()
+	public function __construct()
 	{
-		parent::__contructor();
+		parent::__construct();
 		$this->connection = new Mongo();
 		$this->db = $this->connection->admin;
 		$this->instances = $this->db->instances;
@@ -22,9 +22,9 @@ class Search extends CI_Controller
 		
 		//Obtenemos un cursor para obtener documentos de las instancias existentes, donde la contribucion
 		//se llame como se indica
-		$result=$this->instances->find(array('Contribucion'=>array('Nombre'=>data['contribucion'])));
+		$result=$this->instances->find(array('Contribucion'=>array('Nombre'=>array('data'=>'contribucion'))));
 		
-		$this->load->view('search_result', $result);
+		$this->load->view('search_result', array('cursor'=>$result));
 	}
 	
 }

@@ -92,5 +92,39 @@ class Modelo extends CI_Controller {
 		redirect('modelo/show');
 	}
 
+	public function contribucion_json()
+	{
+		$modelo_id = new MongoId($this->input->get('modelo_id'));
+		$contrib_nombre = $this->input->get('contrib_nombre');
+		if($modelo_id && $contrib_nombre) {
+			$modelo = $this->modelos->findOne(array('_id' => $modelo_id));
+
+			foreach($modelo['contrib'] as $contrib)
+			{
+				
+				if($contrib['nombre'] == $contrib_nombre)
+					echo json_encode($contrib);
+			}
+		}
+	}
+
+	public function contribuciones_json()
+	{
+		$modelo_id = new MongoId($this->input->get('modelo_id'));
+		if($modelo_id) {
+			$modelo = $this->modelos->findOne(array('_id' => $modelo_id));
+	
+			$contribs = array();
+
+			foreach($modelo['contrib'] as $contrib)
+			{
+				
+				array_push($contribs,$contrib['nombre']);
+					
+			}
+			echo json_encode($contribs);
+		}
+	}
+
 
 }

@@ -46,62 +46,54 @@ Released   : 20100328
 		
 	</div>
 	<!-- end #header -->
-	<div id="header2">
 
-			<form id="form2" name="form2" method="post" action="">
-			    <label for="Cursos">Cursos</label>
-			    <select name="Cursos" id="Cursos">
-			    </select>
-			    <label for="Filetype">Tipo Archivo</label>
-			    <select name="Filetype" id="Filetype">
-			    </select>
-			    <label for="año">Año</label>
-			    <select name="año" id="año">
-			    </select>
-			    <label for="Sigla">Sigla</label>
-			    <select name="Sigla" id="Sigla">
-			    </select>
-			    <label for="Departamento">Departamento</label>
-			    <select name="Departamento" id="Departamento">
-			    </select>
-			  </form>
-	
-		<!-- end #search -->
-		
-		
-	</div>
-	
-	
 	
 	<!-- end #header-wrapper -->
 	<div id="page">
 		<div id="content">
 		  <div class="post">
-				<h2 class="title"><a href="#">Apuntes Recientes </a></h2>
+				<h2 class="title"><a href="#">Nueva Contribucion </a></h2>
 					<p class="meta"></p>
 				<div class="entry">
-					<ul>
-						<li><a href="#">Arq SW 1</a></li>
-						<li><a href="#">Examen Arq SW</a></li>
-						<li><a href="#">I3 Arq SW</a></li>
-						<li><a href="#">Ayudantía 3 Gaggeros</a></li>
-						<li><a href="#">Examen Redes de Computadores</a></li>
-						<li><a href="#">Resumen Exámen Arquitectura Software</a></li>
-						</ul>
-			</div>
-		  </div>
-		  <div class="post">
-				<h2 class="title"><a href="#">Más populares </a></h2>
-					<p class="meta"></p>
-				<div class="entry">
-					<ul>
-						<li><a href="#">Arq SW 1</a></li>
-						<li><a href="#">Examen Arq SW</a></li>
-						<li><a href="#">I3 Arq SW</a></li>
-						<li><a href="#">Ayudantía 3 Gaggeros</a></li>
-						<li><a href="#">Examen Redes de Computadores</a></li>
-						<li><a href="#">Resumen Exámen Arquitectura Software</a></li>
-						</ul>
+
+					<form id="modelo">
+					Autor: <input type="text" name="Autor" />  Fecha:<input type="date" name="Autor" /> <br />
+					Materia: <input type="text" name="Autor" /><br />
+					Ramo: <input type="text" name="Autor" /><br />
+					Sigla: <input type="text" name="Autor" /><br />
+					Profesor: <input type="text" name="Autor" /><br />
+					Archivo: <input type="file" name="datafile" size="40"><br />
+					<form method="post" action="mailto:youremail@email.com">
+					
+					Tipos Aceptables de Contribución
+					
+			<input type="radio" name="tipo" value="PDF" /> PDF
+			<input type="radio" name="tipo" value="PPT" /> PPT
+			<input type="radio" name="tipo" value="Videos" /> Videos<br />
+			<input type="radio" name="tipo" value="Docs" /> Docs
+			<input type="radio" name="tipo" value="Comentarios" /> Comentarios<br />
+			<input type="radio" name="tipo" value="PPT" /> Maple
+			<input type="radio" name="tipo" value="Xls" /> Xls<br />
+					
+					
+				Acciones permitidas
+					
+			<input type="radio" name="aciones" value="Comentar" /> Comentar
+			<input type="radio" name="aciones" value="Recomendar" /> Recomendar
+			<input type="radio" name="aciones" value="Linkear" /> Linkear<br />
+			<input type="radio" name="aciones" value="Enviar por Mail" /> Enviar por Mail
+			<input type="radio" name="aciones" value="Modificar" /> Modificar<br />
+			<input type="radio" name="aciones" value="Subir a Redes Sociales" /> Subir a Redes Sociales
+			<input type="radio" name="aciones" value="Denunciar error" /> Denunciar Error<br />
+					
+					
+
+
+					Ingresa tus comentarios:<br /><textarea name="comentarios" rows="2" cols="30">...Tus comentarios aqu&iacute;...</textarea>
+					<input type="submit" value="Submit" />
+</form>
+					</form>
+
 			</div>
 		  </div>
 		</div><!-- end #content -->

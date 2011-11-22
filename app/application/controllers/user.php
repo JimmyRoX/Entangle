@@ -44,7 +44,7 @@
 		}
 		
 		//Listamos usuarios: R
-		function view(){
+		/*function view(){
 			$user_documents = $this->user_model->get_AllUsers();
 			$data = array('user_documents' => array());
 			
@@ -56,7 +56,7 @@
 										);
 			}
 			$this->load->view('user_view', $data);
-		}
+		}*/
 		
 		//Test básico, hay que hacer la query respectiva en Mongo
 		function username_check($string){

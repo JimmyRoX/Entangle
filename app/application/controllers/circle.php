@@ -6,25 +6,27 @@
 			parent::__construct();
 				
 			//cargar librería, helper y modelo.
-			$this->load->library(array('table','validation'));
-			$this->load->helper('url');
-			$this->load->model('circle_model','',TRUE);
+			$this->load->library(array('table','form_validation'));
+			$this->load->helper('form', 'url');
+			//$this->load->model('circle_model','',TRUE);
 		}
 		
 		function index(){
-			$this->load->helper(array('form', 'url'));
+			//$this->load->helper(array('form', 'url'));
 			
-			$this->load->library('form_validation');
+			//$this->load->library('form_validation');
 					
 			//Reglas de validación
 			$this->form_validation->set_rules('name', 'Name', 'callback_circlename_check');
-			$this->form_validation->set_rules('modelname', 'Model Name', 'callback_modelname_check');
+			$this->form_validation->set_rules('modelname', 'Model Name', 'required');
 			$this->form_validation->set_rules('adminname', 'Administrator Name', 'callback_username_check');
 			
-			if ($this->form_validation->run() == FALSE){
+			if ($this->form_validation->run() == FALSE)
+			{
 				$this->load->view('circle_create_view');
 			}
-			else{
+			else
+			{
 				$this->load->view('circle_create_view_success');
 			}
 		}
@@ -38,7 +40,7 @@
 				'name' => $this->input->post('name'),
 				'modelname' => $this->input->post('modelname'),
 				'adminname' => $this->input->post('adminname')
-			);
+				);
 						
 			$this->circle_model->add_Circle($data);
 			$this->index();
@@ -46,13 +48,11 @@
 		
 		//Test básico, hay que hacer la query respectiva en Mongo
 		function circlename_check($string){
-			if ($string == 'test')
-			{
+			if ($string == 'test'){
 				$this->form_validation->set_message('circlename_check', 'The %s field can not be the word "test"');
 				return FALSE;
 			}
-			else
-			{
+			else{
 				return TRUE;
 			}
 		}
@@ -60,12 +60,10 @@
 		function username_exists($string)
 		{
 			$check = $this->user_model->get_User($string);
-			if ($check)
-			{
+			if ($check){
 				return TRUE;
 			}
-			else
-			{
+			else{
 				$this->form_validation->set_message('username_exists', 'The specified username %s can not be the circle administrator.');
 				return FALSE;
 			}
@@ -76,3 +74,4 @@
 			
 		}
 	}
+?>

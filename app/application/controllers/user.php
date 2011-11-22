@@ -6,26 +6,27 @@
 			parent::__construct();
 			
 			//cargar librería, helper y modelo.
-			$this->load->library(array('table','validation'));
-			$this->load->helper('url');
-			$this->load->model('user_model','',TRUE);
+			$this->load->library(array('table','form_validation'));
+			$this->load->helper('form', 'url');
+			//$this->load->model('user_model','',TRUE);
 		}
 		
 		function index(){
-			
 			$this->load->helper(array('form', 'url'));
 			$this->load->library('form_validation');
 			
 			//reglas de validación.
 			$this->form_validation->set_rules('name', 'Name', 'callback_username_check');
-			$this->form_validation->set_rules('password', 'Password', 'required|matches[confirm]');
+			$this->form_validation->set_rules('password', 'Password', 'required');
 			$this->form_validation->set_rules('confirm', 'Confirm', 'required');
-			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+			$this->form_validation->set_rules('email', 'Email', 'required');
 			
-			if ($this->form_validation->run() == FALSE){
+			if ($this->form_validation->run() == FALSE)
+			{
 				$this->load->view('user_create_view');
 			}
-			else{
+			else
+			{
 				$this->load->view('user_create_view_success');
 			}
 			//$this->load->view('user_create_view');
@@ -37,8 +38,7 @@
 				'name' => $this->input->post('name'),
 				'password' => $this->input->post('password'),
 				'email' => $this->input->post('email')
-			);
-						
+			);		
 			$this->user_model->add_User($document);
 			$this->index();
 		}
@@ -53,7 +53,7 @@
 				$data['documents'][] = array(
 										'name' => $user_document['name'];
 										'email' => $user_document['email'];
-				);
+										);
 			}
 			$this->load->view('user_view', $data);
 		}
@@ -79,3 +79,4 @@
 		}
 			
 	}
+?>

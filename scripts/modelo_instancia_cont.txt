@@ -1,0 +1,136 @@
+﻿db.usuarios.drop();
+db.circulos.drop();
+db.modelos.drop();
+db.instancias.drop();
+
+db.createCollection("usuarios");
+db.createCollection("circulos");
+db.createCollection("modelos");
+db.createCollection("instancias");
+
+//creando los permisos de 2 circulos para 2 modelos
+var cursos = {nombre:"cursos", view:1,edit:1,invite:1,member:1};
+var research = {nombre:"research", view:1,edit:1,invite:1,member:1};
+
+//al grabar las variables tendran un atributo ._id
+db.circulos.save( cursos );
+db.circulos.save( research );
+
+//usuarios y los circulos a los que pertenecen
+var hugo =  {nombre:"hugo", password:"hugopass", email:"hugo@mail.com",acl:[{circle:cursos._id},{circle:research._id}]} 
+var paco =  {nombre:"paco", password:"pacopass", email:"paco@mail.com",acl:[{circle:cursos._id}]} 
+var luis =  {nombre:"luis", password:"luispass", email:"luis@mail.com",acl:[{circle:research._id}]} 
+
+db.usuarios.save(hugo)
+db.usuarios.save(paco)
+db.usuarios.save(luis)
+
+//buscar los circulos y permisos (acl) de hugo
+for (var c2=db.usuarios.find({'nombre':'hugo'},{'acl':1,'_id':0}); c2.hasNext();) {
+ j = c2.next().acl;
+}
+
+//vemos los permisos de hugo (pertenece a 2 circulos/modelos)
+db.circulos.find({'_id':j[0]['circle']},{'_id':0});
+db.circulos.find({'_id':j[1]['circle']},{'_id':0});
+
+
+////////////////////////////////////
+
+//creamos un modelo con 3 tipos de contribuciones 
+var cursos_model = 
+    { nombre: "cursos", 
+      circle: cursos._id,
+      contrib: [ { nombre : "clase", 
+                   content : "", 
+                   metadata : [ { nombre : "nombre" , tipo : "string" }, 
+                                { nombre : "autor", tipo : "string" },
+                                { nombre : "fecha_creacion", tipo : "date" },
+                                { nombre : "descripcion", tipo : "string" },
+                                { nombre : "widget-browsing", location: "/var/www/widgets/ppt1.html" },
+                                { nombre : "widget-display" , location: "/var/www/widgets/ppt2.html" },
+                               ],
+                   refs : [ { nombre : "comentarios", target : "comentario"},
+                            { nombre : "recomienda", target : "paper", 
+                              metadata : [ { nombre : "autor", tipo : "string" } ] }
+                          ]
+                 },
+
+                 { nombre : "paper", 
+                   content : "", 
+                   metadata : [ { nombre : "nombre" , tipo : "string" }, 
+                                { nombre : "autores", tipo : "string" },
+                                { nombre : "annio", tipo : "int" },
+                                { nombre : "abstract", tipo : "string" },
+                                { nombre : "widget-browsing", location: "/var/www/widgets/paper1.html"  },
+                                { nombre : "widget-display" , location: "/var/www/widgets/paper2.html" },
+                              ],
+                 },
+
+                 { nombre : "comentario", 
+                   content : "", 
+                   metadata : [ { nombre : "nombre" , tipo : "string" }, 
+                                { nombre : "autor", tipo : "string" },
+                                { nombre : "fecha_creacion", tipo : "date" },
+                                { nombre : "widget-browsing", location: "/var/www/widgets/comment1.html"  },
+                                { nombre : "widget-display" , location: "/var/www/widgets/comment2.html" },
+                              ],
+                 },
+
+                 { nombre : "video", 
+                   content : "", 
+                   metadata : [ { nombre : "nombre" , tipo : "string" }, 
+                                { nombre : "autor", tipo : "string" },
+                                { nombre : "fecha_creacion", tipo : "date" },
+                                { nombre : "widget-browsing", location: "/var/www/widgets/video1.html"  },
+                                { nombre : "widget-display" , location: "/var/www/widgets/video2.html" },
+                              ],
+                 }
+         ]
+}
+
+db.modelos.save(cursos_model)
+
+////////////////////////////////////
+
+//creamos contribuciones segun el modelo 
+
+//Creamos una instancia de modelo
+var curso_instancia = 
+    { modelo: cursos_model._id, 
+      admin: hugo._id,
+      contribucion: [
+          { id: 1,
+            model : cursos_model._id,
+            tipo : "paper",
+            content : "/var/www/files/2011-icse-java-jvm.pdf" ,
+            metadata : { nombre : "JVM: A self-tunned virtual machine" , autores : "Zuzeck, V., Vitvar, M." ,
+                        annio : "2007" , abstract : "This paper presents a review of the ... " }
+           },
+           { id: 2,
+           model : cursos_model._id,
+           tipo : "comentario",
+           content : "Este paper es muuuuy largo" ,
+           metadata : { nombre : "tl;dr" , autor : "hugo" ,
+           fecha_creacion : "2011-11-22"  }
+           },
+           { id: 3, 
+           model : cursos_model._id,
+           tipo : "video",
+           content : "http://ing.puc.cl/videos/12345678.mp4" ,
+           metadata : { nombre : "Presentaciones taller" , autor : "paco" ,
+           fecha_creacion : "2011-11-22"  }
+           },
+           { id: 4, 
+           model : cursos_model._id,
+           tipo : "clase",
+           content : "/var/www/files/intro-java.pdf" ,
+           metadata : { nombre : "Introduccion a Java" , autor : "luis" , fecha_creacion : "2011-11-21" ,
+           descripcion : "Incluye ejercicios" },
+           refs : [ { comentarios : 2}, {recomienda : 1, metadata :  { autor : "hugo" } } ]
+           }
+       ]
+  }
+
+db.instancias.save(curso_instancia)
+

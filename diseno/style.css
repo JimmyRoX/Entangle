@@ -113,6 +113,24 @@ hr { display: none; }
 	float:left
 	
 }
+#contribucion {
+
+background:#222;
+color:white;
+align:center;
+	
+}
+
+#modelo {
+
+background:#222;
+color:white;
+height:350px;
+padding: 15px;
+
+	
+}
+
 
 
 /** LOGO */

@@ -46,62 +46,60 @@ Released   : 20100328
 		
 	</div>
 	<!-- end #header -->
-	<div id="header2">
 
-			<form id="form2" name="form2" method="post" action="">
-			    <label for="Cursos">Cursos</label>
-			    <select name="Cursos" id="Cursos">
-			    </select>
-			    <label for="Filetype">Tipo Archivo</label>
-			    <select name="Filetype" id="Filetype">
-			    </select>
-			    <label for="año">Año</label>
-			    <select name="año" id="año">
-			    </select>
-			    <label for="Sigla">Sigla</label>
-			    <select name="Sigla" id="Sigla">
-			    </select>
-			    <label for="Departamento">Departamento</label>
-			    <select name="Departamento" id="Departamento">
-			    </select>
-			  </form>
-	
-		<!-- end #search -->
-		
-		
-	</div>
-	
-	
 	
 	<!-- end #header-wrapper -->
 	<div id="page">
 		<div id="content">
 		  <div class="post">
-				<h2 class="title"><a href="#">Apuntes Recientes </a></h2>
+				<h2 class="title"><a href="#">Nuevo Modelo </a></h2>
 					<p class="meta"></p>
 				<div class="entry">
-					<ul>
-						<li><a href="#">Arq SW 1</a></li>
-						<li><a href="#">Examen Arq SW</a></li>
-						<li><a href="#">I3 Arq SW</a></li>
-						<li><a href="#">Ayudantía 3 Gaggeros</a></li>
-						<li><a href="#">Examen Redes de Computadores</a></li>
-						<li><a href="#">Resumen Exámen Arquitectura Software</a></li>
-						</ul>
-			</div>
-		  </div>
-		  <div class="post">
-				<h2 class="title"><a href="#">Más populares </a></h2>
-					<p class="meta"></p>
-				<div class="entry">
-					<ul>
-						<li><a href="#">Arq SW 1</a></li>
-						<li><a href="#">Examen Arq SW</a></li>
-						<li><a href="#">I3 Arq SW</a></li>
-						<li><a href="#">Ayudantía 3 Gaggeros</a></li>
-						<li><a href="#">Examen Redes de Computadores</a></li>
-						<li><a href="#">Resumen Exámen Arquitectura Software</a></li>
-						</ul>
+
+
+
+
+<script type="text/javascript">
+<!--
+num=0;
+function crear(obj) {
+  num++;
+  fi = document.getElementById('fiel'); // 1
+  contenedor = document.createElement('div'); // 2
+  contenedor.id = 'div'+num; // 3
+  fi.appendChild(contenedor); // 4
+ 
+  ele = document.createElement('input'); // 5
+  ele.type = 'text'; // 6
+  ele.name = 'fil'+num; // 6
+  contenedor.appendChild(ele); // 7
+  
+	ele = document.createElement('select'); // 5
+	ele.name = 'fil1'+num; // 6
+  	contenedor.appendChild(ele); // 7
+  
+  
+  ele = document.createElement('input'); // 5
+  ele.type = 'button'; // 6
+  ele.value = 'Borrar'; // 8
+  ele.name = 'div'+num; // 8
+  ele.onclick = function () {borrar(this.name)} // 9
+  contenedor.appendChild(ele); // 7
+}
+function borrar(obj) {
+  fi = document.getElementById('fiel'); // 1 
+  fi.removeChild(document.getElementById(obj)); // 10
+}
+--> 
+</script>
+ <form id="contribucion" method="post" action="algo.php">
+<fieldset id="fiel">
+<input type="button" value="Nuevo Campo" onclick="crear(this)" />
+</fieldset>
+</form>
+
+
+
 			</div>
 		  </div>
 		</div><!-- end #content -->

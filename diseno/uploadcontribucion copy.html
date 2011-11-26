@@ -52,41 +52,53 @@ Released   : 20100328
 	<div id="page">
 		<div id="content">
 		  <div class="post">
-				<h2 class="title"><a href="#">Nueva Contribucion </a></h2>
+				<h2 class="title"><a href="#">Nuevo Modelo </a></h2>
 					<p class="meta"></p>
 				<div class="entry">
 
-					<form id="modelo">
-					Autor: <input type="text" name="Autor" />  Fecha:<input type="date" name="Autor" /> <br />
-
-					
-					Tipos Aceptables de Contribución
-					
-			<input type="radio" name="tipo" value="PDF" /> PDF
-			<input type="radio" name="tipo" value="PPT" /> PPT
-			<input type="radio" name="tipo" value="Videos" /> Videos<br />
-			<input type="radio" name="tipo" value="Docs" /> Docs
-			<input type="radio" name="tipo" value="Comentarios" /> Comentarios<br />
-			<input type="radio" name="tipo" value="PPT" /> Maple
-			<input type="radio" name="tipo" value="Xls" /> Xls<br />
-					
-					
-				Acciones permitidas
-					
-			<input type="radio" name="aciones" value="Comentar" /> Comentar
-			<input type="radio" name="aciones" value="Recomendar" /> Recomendar
-			<input type="radio" name="aciones" value="Linkear" /> Linkear<br />
-			<input type="radio" name="aciones" value="Enviar por Mail" /> Enviar por Mail
-			<input type="radio" name="aciones" value="Modificar" /> Modificar<br />
-			<input type="radio" name="aciones" value="Subir a Redes Sociales" /> Subir a Redes Sociales
-			<input type="radio" name="aciones" value="Denunciar error" /> Denunciar Error<br />
-					
-					
 
 
 
+<script type="text/javascript">
+<!--
+num=0;
+function crear(obj) {
+  num++;
+  fi = document.getElementById('fiel'); // 1
+  contenedor = document.createElement('div'); // 2
+  contenedor.id = 'div'+num; // 3
+  fi.appendChild(contenedor); // 4
+ 
+  ele = document.createElement('input'); // 5
+  ele.type = 'text'; // 6
+  ele.name = 'fil'+num; // 6
+  contenedor.appendChild(ele); // 7
+  
+	ele = document.createElement('select'); // 5
+	ele.name = 'fil1'+num; // 6
+  	contenedor.appendChild(ele); // 7
+  
+  
+  ele = document.createElement('input'); // 5
+  ele.type = 'button'; // 6
+  ele.value = 'Borrar'; // 8
+  ele.name = 'div'+num; // 8
+  ele.onclick = function () {borrar(this.name)} // 9
+  contenedor.appendChild(ele); // 7
+}
+function borrar(obj) {
+  fi = document.getElementById('fiel'); // 1 
+  fi.removeChild(document.getElementById(obj)); // 10
+}
+--> 
+</script>
+ <form id="contribucion" method="post" action="algo.php">
+<fieldset id="fiel">
+<input type="button" value="Nuevo Campo" onclick="crear(this)" />
+</fieldset>
+</form>
 
-					</form>
+
 
 			</div>
 		  </div>

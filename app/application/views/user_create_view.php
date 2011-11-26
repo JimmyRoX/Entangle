@@ -6,11 +6,12 @@
 </head>
 
 <body>
+<div id="signup_form">
 <h3>Register new User</h3>
 
 <?php echo validation_errors(); ?>
 
-<?php echo form_open('user/index'); ?>
+<?php echo form_open('user/signup'); ?>
 
 <p>
 <label for="name">Name*:</label>
@@ -33,9 +34,10 @@
 </p>
 
 <p>
-<input type="submit" value="Register"/> <input type="reset" value="Reset fields"/>
+ <?php echo form_submit('submit','Register new account'); ?> <input type="reset" value="Reset fields"/>
 </p>
 *: Indicates a requiered field.
-<a href="<?php echo siteurl(array('user', 'view')); ?>">View current Users</a>
+<?php echo form_close()?>
 </body>
+</div>
 </html>

@@ -12,7 +12,7 @@ class User_Model extends CI_Model{
 	}
 
 	function get_User($name){
-		$user_document = $this->users->findOne(array('nombre' => $name));
+		$user_document = $this->users->findOne(array("name" => $name));
 		return $user_document;
 	}
 	
@@ -26,7 +26,7 @@ class User_Model extends CI_Model{
 	}
 	
 	function update_User($data){
-		$this->users->update(array("nombre" => $data['name']), $data);
+		$this->users->update(array("name" => $data['name']), $data);
 	}
 	
 	//Por el momento no habrá Delete

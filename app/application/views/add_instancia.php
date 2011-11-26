@@ -22,7 +22,7 @@
 				
 			?>
 		</select></p>
-		<p>Administradores:<select multiple size=2 id="admins" name="admins"> 
+		<p>Administrador:<select id="admins" name="admins"> 
 			<?php 
 				foreach(array_keys($usuarios) as $usuario)
 				{
@@ -30,10 +30,16 @@
 				}
 			?>
 		</select></p>
-		<p>Quien puede leer:<select multiple size=3 id="lectura" name="lectura"> 
+		<p>C&iacute;rculo de Usuarios :<select id="circulo" name="circulo">
+			<?php 			
+				foreach(array_keys($circulos) as $circulo)
+				{
+					echo "<option value=\"".$circulos[$circulo]."\">".$circulo."</option>";
+				}
+				
+			?>
 		</select></p>
-		<p>Quien puede escribir:<select multiple size=3 id="lectura" name="lectura"> 
-		</select></p>
+
 		<input type="submit"  value="Crear"/>
 		</fieldset>	
 	<?php echo form_close(); ?>	

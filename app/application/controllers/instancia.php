@@ -33,8 +33,18 @@ class instancia extends CI_Controller
 			$models_name[$model["nombre"]]=$model["_id"];
 		}			
 		
+		$this->circulos = $this->db->circulos;		
+		$circles=$this->circulos->find();
+		$circles_name = null;
+		foreach($circles as $circle)
+		{
+			$circles_name[$circle["nombre"]]=$circle["_id"];
+		}	
+		
 		$data["usuarios"]=$users_names;
 		$data["modelos"]=$models_name;
+		$data["circulos"]=$circles_name;
+		
 
 		$this->load->view('add_instancia.php', $data);
 	}
@@ -47,15 +57,15 @@ class instancia extends CI_Controller
 		
 		$instance["nombre"]=$data["nombre"];
 		$instance["modelo"]=$data["modelo"];
-		//$instance["admins"]=$data["admins"];
-		//$result=$this->models->find(array('contrib.nombre'=> array('$regex' => '.*clase.*')));
+		$instance["circulo"]=$data["circulo"];
+				
+		if($this->instancias->insert($instance))
+			$result["result"]=true;
+		else
+			$result["result"]=false;
 		
-		$this->instancias->insert($instance);
-		//$data = array('nombre' => $result['nombre']);
-		$result["result"]=true;
 		$result["nombre"]=$instance["nombre"];
-		//$data["usuarios"]=$users_names;
-		//$this->load->view('search_result', $data);
+		
 		$this->load->view('result_add_instancia.php', $result);
 	}
 	

@@ -5,26 +5,70 @@ class Search extends CI_Controller
 	{
 		parent::__construct();
 		$this->connection = new Mongo();
-		$this->db = $this->connection->admin;
-		$this->instances = $this->db->instances;
+		$this->db = $this->connection->test;
+		
 	}
 
 	
 	function index()
 	{
-		$this->load->view('search_home');
-
+		$this->search_home();
+	}
+	
+	function ref_search()
+	{
+		$data=$this->input->get('id');		
+		$this->contribs = $this->db->contribs;
+		
+		//$contribuciones=$this->contribs->find();
+		$contribuciones=$this->contribs->find(array('_id'=> new MongoId($data)));		
+		$instancias=array();
+		
+		$this->instancias = $this->db->instancias;
+		$tipo="";
+		foreach($contribuciones as $instancia)
+		{
+			$instance = $this->instancias->findOne(array('_id' => $instancia['instancia']));
+			$instancia['instancia']=$instance['nombre'];
+			$tipo=$instancia['tipo'];
+			array_push($instancias, $instancia);
+		}	
+		
+		
+		$this->load->view('search_result', array('instancias'=>$instancias, 'keyword' => $tipo));
+	}
+	
+	function search_home()
+	{
+		$this->contribs = $this->db->contribs;		
+		$cursor=$this->contribs->find(array(), array('tipo' => '1'));
+			
+		$data['tipos'] = $cursor;
+		
+		$this->load->view('search_home', $data);
 	}
 	
 	function search_result()
 	{
 		$data=$this->input->post();
+		$keyword=$data['contribucion'];
+		$type=$data['tipo'];
+		$this->contribs = $this->db->contribs;
 		
-		//Obtenemos un cursor para obtener documentos de las instancias existentes, donde la contribucion
-		//se llame como se indica
-		$result=$this->instances->find(array('Contribucion'=>array('Nombre'=>array('data'=>'contribucion'))));
+		//$contribuciones=$this->contribs->find();
+		$contribuciones=$this->contribs->find(array('metadata.nombre'=> array('$regex' => '.*'.$keyword.'.*', '$options' => 'i'), 'tipo'=> array('$regex' => '.*'.$type.'.*')));
+		$instancias=array();
 		
-		$this->load->view('search_result', array('cursor'=>$result));
+		$this->instancias = $this->db->instancias;
+		foreach($contribuciones as $instancia)
+		{
+			$instance = $this->instancias->findOne(array('_id' => $instancia['instancia']));
+			$instancia['instancia']=$instance['nombre'];
+			array_push($instancias, $instancia);
+		}	
+		
+		
+		$this->load->view('search_result', array('instancias'=>$instancias, 'keyword' => $keyword));
 	}
 	
 }

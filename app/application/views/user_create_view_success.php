@@ -6,7 +6,11 @@
 
 <h3>Your user was successfully registered!</h3>
 
-<p><?php echo anchor('user/signup', 'Try it again!'); ?></p>
-
+<p>
+<?php echo anchor('user/signup', 'Try it again!'); ?>
+</p>
+<p>
+<?php echo anchor('user/login','Go to login'); ?>
+</p>
 </body>
 </html>

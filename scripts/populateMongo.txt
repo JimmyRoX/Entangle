@@ -1,0 +1,183 @@
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t application/pdf put /home/cvairetti/filesPopulateMongo/1998BorgerJVMasPlatformForPcorrect.pdf
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t application/pdf put /home/cvairetti/filesPopulateMongo/javanotes5.pdf
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t text/html put /home/cvairetti/filesPopulateMongo/wb-paper1.html
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t text/html put /home/cvairetti/filesPopulateMongo/wd-paper1.html
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t text/html put /home/cvairetti/filesPopulateMongo/wb-comment1.html
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t text/html put /home/cvairetti/filesPopulateMongo/wd-comment1.html
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t text/html put /home/cvairetti/filesPopulateMongo/wb-video1.html
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t text/html put /home/cvairetti/filesPopulateMongo/wd-video1.html
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t text/html put /home/cvairetti/filesPopulateMongo/wd-class1.html
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongofiles -d entangle -t text/html put /home/cvairetti/filesPopulateMongo/wb-class1.html
+
+
+/usr/local/mongo/mongodb-linux-x86_64-2.0.1/bin/mongo
+use entangle
+db.users.drop()
+db.circles.drop()
+db.models.drop()
+db.submodels.drop()
+db.contribs.drop()
+db.fs.chunks.drop()
+db.fs.files.drop()
+
+db.createCollection("users")
+db.createCollection("circles")
+db.createCollection("models")
+db.createCollection("submodels")
+db.createCollection("contribs")
+db.createCollection("fs.chunks")
+db.createCollection("fs.files")
+
+//creando los permisos de 2 circulos para 2 modelos
+var cursos = {name:"cursos", view:1,edit:1,invite:1,member:1}
+var research = {name:"research", view:1,edit:1,invite:1,member:1}
+
+//Model owner crea Modelo, Model Owner crea sub-modelos
+//Model owner crea circulos para Sub-modelo
+//Nombre de circulo = Nombre de Submodelo
+
+//al grabar las variables tendran un atributo ._id
+db.circles.save( cursos )
+db.circles.save( research )
+
+//usuarios y los circulos a los que pertenecen
+var hugo =  {name:"hugo", password:"hugopass", email:"hugo@mail.com",acl:[{circle:cursos._id},{circle:research._id}]} 
+var paco =  {name:"paco", password:"pacopass", email:"paco@mail.com",acl:[{circle:cursos._id}]} 
+var luis =  {name:"luis", password:"luispass", email:"luis@mail.com",acl:[{circle:research._id}]} 
+
+db.users.save(hugo)
+db.users.save(paco)
+db.users.save(luis)
+
+//buscar los circulos y permisos (acl) de hugo
+//for (var c2=db.users.find({'name':'hugo'},{'acl':1,'_id':0}); c2.hasNext();) {
+// j = c2.next().acl;
+//}
+
+//vemos los permisos de hugo (pertenece a 2 circulos/modelos)
+//db.circles.find({'_id':j[0]['circle']},{'_id':0});
+//db.circles.find({'_id':j[1]['circle']},{'_id':0});
+
+////////////////////////////////////  grid.fs
+//upload files:
+// <mongo_dir>/bin/mongofiles -d entangle -t <mediatype> put <source_file>
+//media: text/html,  application/pdf
+//grid.fs   ... widget-browsing / widget-display  ... php
+//ej. { name : "widget-browsing", location: "/var/www/widgets/wb-paper1.html"  },
+//ej. { name : "widget-display" , location: "/var/www/widgets/wd-paper1.html" },
+//ej. { name : "widget-browsing", location: "/var/www/widgets/wb-comment1.html"  },
+//ej. { name : "widget-display" , location: "/var/www/widgets/wd-comment1.html" },
+//ej. { name : "widget-browsing", location: "/var/www/widgets/wb-video1.html"  },
+//ej. { name : "widget-display" , location: "/var/www/widgets/wd-video1.html" },
+
+//creamos un modelo con 3 tipos de contribuciones 
+var cursos_model = 
+    { nombre: "cursos", 
+      circles: [ {acl : cursos._id}] ,
+      tipoContrib: [ { nombre : "clase", 
+                       content : "file", 
+                       widget_browsing: ObjectId("4ed7b40a66f2dd2a4a449a5d"),
+                       widget_display : ObjectId("4ed7b4087cfeb8d815632e3f"),
+                       metadata : [ { name : "nombre" , tipo : "string" }, 
+                                    { name : "autor", tipo : "string" },
+                                    { name : "fecha_creacion", tipo : "date" },
+                                    { name : "descripcion", tipo : "longtext" },
+                                   ],
+                        refs : [ { name : "comentarios", target : "comentario"},
+                                 { name : "recomienda", target : "paper", 
+                                   metadata : [ { name : "autor", tipo : "string" } ] }
+                               ]
+                     },
+                     { nombre : "paper", 
+                       content : "file", 
+                       widget_browsing: ObjectId("4ed7b348087e82b4244dc5b6"),
+                       widget_display : ObjectId("4ed7b3483ccb79c0d9353e91"),
+                       metadata : [ { name : "nombre" , tipo : "string" }, 
+                                      { name : "autores", tipo : "string" },
+                                      { name : "annio", tipo : "int" },
+                                      { name : "abstract", tipo : "longtext" },
+                              ],
+                     },
+                     { nombre : "comentario", 
+                       content : "longtext", 
+                       widget_browsing: ObjectId("4ed7b3484463f9c224177d63"),
+                       widget_display : ObjectId("4ed7b3481fde0b0e119d7867"),
+                       metadata : [ { name : "nombre" , tipo : "string" }, 
+                                    { name : "autor", tipo : "string" },
+                                    { name : "fecha_creacion", tipo : "date" },
+                              ],
+                     },
+                     { nombre : "video", 
+                       content : "url", 
+                       widget_browsing: ObjectId("4ed7b3488612f7016b83235a"),
+                       widget_display : ObjectId("4ed7b3486fb971d8ac1a7c5a"),
+                       metadata : [ { name : "nombre" , tipo : "string" }, 
+                                    { name : "autor", tipo : "string" },
+                                    { name : "fecha_creacion", tipo : "date" },
+                              ],
+                 }
+         ]
+}
+
+db.models.save(cursos_model)
+
+////////////////////////////////////
+//creamos un sub-modelo del modelo 
+var cursos_submodel = 
+    { nombre: "cursoJava",
+      title: "Introducción a la Programación",
+      model: cursos_model._id,
+      circle: [ {acl : cursos._id}] ,
+    }
+
+db.submodels.save(cursos_submodel)
+
+//////////////////////////////////// grid.fs   mimetype id name
+      content : "/var/www/files/1998BorgerJVMasPlatformForPcorrect.pdf" ,
+//content : "/var/www/files/javanotes5.pdf" ,
+
+////////////////////////////////////
+
+//creamos contribuciones segun el modelo 
+var contrib1 = 
+    { submodel : cursos_submodel._id,
+      tipoContrib : "paper",
+      content : ObjectId("4ed7b3470e20d44690de904e"),
+      metadata : { nombre : "Deﬁning the Java Virtual Machine as Platform for Provably Correct Java Compilation" ,
+                   autores : "Borger, E. and Schulte, W." ,
+                   annio : "1998" , abstract : "Abstract. We provide concise abstract code for running the Java Virtual Machine (JVM) to execute compiled Java programs, and deﬁne a general compilation scheme of Java programs to JVM code. These definitions, together with the deﬁnition of an abstract interpreter of Java programs given in our previous work [3], allow us to prove that any compiler that satisﬁes the conditions stated in this paper compiles Java code correctly. In addition we have validated our JVM and compiler speciﬁcation through experimentation. The modularity of our deﬁnitions for Java, the JVM and the compilation scheme exhibit orthogonal language, machine and compiler components, which ﬁt together and provide the basis for a stepwise and provably correct design–for–reuse. As a by-product we provide a challenging realistic case study for mechanical veriﬁcation of a compiler correctness proof. " }
+    }
+
+db.contribs.save(contrib1)
+
+var contrib2 = 
+    { submodel : cursos_submodel._id,
+      tipoContrib : "comentario",
+      content : "Este paper es muuuuy largo" ,
+      metadata : { nombre : "tl;dr" , autor : "hugo" ,
+                   fecha_creacion : "2011-11-22"  }
+    }
+
+db.contribs.save(contrib2)
+
+var contrib3 = 
+    { submodel : cursos_submodel._id,
+      tipoContrib : "clase",
+      content : ObjectId("4ed7b3476b4f2efa76744346") ,
+      metadata : { nombre : "Introduction to Programming Using Java" , autor : "David J. Eck Hobart and William Smith Colleges" , fecha_creacion : "2006-12-01" ,
+                   descripcion : "Introduction to Programming Using Java is a free introductory computer programming textbook that uses Java as the language of instruction. It is suitable for use in an introductory programming course and for people who are trying to learn programming on their own. There are no prerequisites beyond a general familiarity with the ideas of computers and programs. There is enough material for a full year of college-level programming. Chapters 1 through 7 can be used as a textbook in a one-semester college-level course or in a year-long high school course." },
+      refs : [ { comentarios : contrib2._id}, {recomienda : contrib1._id, metadata :  { autor : "hugo" } } ]
+}
+
+db.contribs.save(contrib3)
+
+var contrib4 = 
+    { submodel : cursos_submodel._id,
+      tipoContrib : "video",
+      content : "http://www.youtube.com/embed/b-Cr0EWwaTk",
+      metadata : { nombre : "Java rap" , autor : "paco" ,
+                   fecha_creacion : "2011-11-22"  }
+    }
+
+db.contribs.save(contrib4)
+

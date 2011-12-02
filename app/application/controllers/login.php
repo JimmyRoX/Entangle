@@ -47,6 +47,7 @@ class Login extends CI_Controller {
 				unset($upass);
 				$data = array(
 					'username' => $udoc['name'],
+					'acl' => $udoc['acl'],
 					'logged_in' => TRUE
 					);
 				//guardamos las variables necesarias en el objeto sesion

@@ -12,7 +12,7 @@ class Circle_Model extends CI_Model{
 	}
 	
 	function get_Circle($name){
-		$circle_document = $this->circles->findOne(array('nombre' => $name));
+		$circle_document = $this->circles->findOne(array("name" => $name));
 		return $circle_document;
 	}
 
@@ -26,7 +26,7 @@ class Circle_Model extends CI_Model{
 	}
 	
 	function update_Circle($data){
-		$this->circles->update(array("nombre" => $data['name']), $data);
+		$this->circles->update(array("name" => $data['name']), $data);
 	}
 
 	//Por el momento no habrá Delete

@@ -6,72 +6,66 @@
 			parent::__construct();
 				
 			//cargar librería, helper y modelo.
-			$this->load->library(array('table','form_validation'));
+			$this->load->library(array('table', 'form_validation'));
 			$this->load->helper('form', 'url');
-			//$this->load->model('circle_model','',TRUE);
+			$this->load->model('circle_model');
+			$this->load->model('user_model');
 		}
 		
 		function index(){
-			//$this->load->helper(array('form', 'url'));
 			
-			//$this->load->library('form_validation');
-					
 			//Reglas de validación
 			$this->form_validation->set_rules('name', 'Name', 'callback_circlename_check');
-			$this->form_validation->set_rules('modelname', 'Model Name', 'required');
-			$this->form_validation->set_rules('adminname', 'Administrator Name', 'callback_username_check');
+			$this->form_validation->set_rules('adminname', 'Administrator Name', 'callback_username_exists');
 			
-			if ($this->form_validation->run() == FALSE)
-			{
+			if ($this->form_validation->run() == FALSE){
 				$this->load->view('circle_create_view');
+				return;
 			}
-			else
-			{
-				$this->load->view('circle_create_view_success');
-			}
+			
+			self::create();
+			
+			$this->load->view('circle_create_view_success');
 		}
 		
-		/**
-		 * Crear Círculo
-		 * Para mapear el círculo en la base de datos.
-		 */
 		function create(){
+			$i = 1;
 			$data = array(
 				'name' => $this->input->post('name'),
-				'modelname' => $this->input->post('modelname'),
-				'adminname' => $this->input->post('adminname')
+				'adminname' => $this->input->post('adminname'),
+				'view' => $i,
+				'edit' => $i,
+				'invite' => $i,
+				'member' => $i
 				);
 						
 			$this->circle_model->add_Circle($data);
-			$this->index();
 		}
 		
-		//Test básico, hay que hacer la query respectiva en Mongo
+		function username_exists($string){
+			$document = $this->user_model->get_User($string);
+			if($document){
+				return TRUE;
+			}
+			$this->form_validation->set_message('username_check', 'This username does not exists.');
+			return FALSE;
+		}
+		
 		function circlename_check($string){
+				
 			if ($string == 'test'){
-				$this->form_validation->set_message('circlename_check', 'The %s field can not be the word "test"');
+				$this->form_validation->set_message('circlename_check', 'The %s field can not be the word "test".');
 				return FALSE;
 			}
-			else{
-				return TRUE;
-			}
-		}
-		
-		function username_exists($string)
-		{
-			$check = $this->user_model->get_User($string);
-			if ($check){
-				return TRUE;
-			}
-			else{
-				$this->form_validation->set_message('username_exists', 'The specified username %s can not be the circle administrator.');
+				
+			$document = $this->circle_model->get_Circle($string);
+				
+			if($document['name'] == $string){
+				$this->form_validation->set_message('circlename_check', 'This circle name is already taken.');
 				return FALSE;
 			}
+			return TRUE;
 		}
 		
-		function add_user()
-		{
-			
-		}
 	}
 ?>

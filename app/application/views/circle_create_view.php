@@ -16,20 +16,16 @@
 <label for="name">Name*:</label>
 <input type="text" name="name" id="name" value="<?php echo set_value('name'); ?>"/>
 </p>
-
-<p>
-<label for="modelname">Model Name*:</label>
-<input type="text" name="modelname" id="modelname" value="<?php echo set_value('modelname'); ?>"/>
-</p>
-
+<!--
 <p>
 <label for="adminname">Administrator Name*:</label>
 <input type="text" name="adminname" id="adminname" value="<?php echo set_value('adminname'); ?>"/>
 </p>
-
+-->
 <p>
-<input type="submit" value="Create"/> <input type="reset" value="Reset fields"/>
+<?php echo form_submit('submit','Create circle'); ?> <input type="reset" value="Reset fields"/>
 </p>
 *: Indicates a required field.
+<?php echo form_close(); ?>
 </body>
 </html>

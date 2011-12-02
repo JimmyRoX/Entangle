@@ -10,7 +10,7 @@
 <?php echo anchor('user/signup', 'Try it again!'); ?>
 </p>
 <p>
-<?php echo anchor('user/login','Go to login'); ?>
+<?php echo anchor('login/index','Go to login'); ?>
 </p>
 </body>
 </html>

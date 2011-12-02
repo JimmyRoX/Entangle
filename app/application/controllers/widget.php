@@ -10,5 +10,9 @@ class Widget extends CI_Controller
 	{
 		$this->load->view('content_widget');
 	}
+	function popup()
+	{
+		$this->load->view('popup_widget');
+	}
 }
 

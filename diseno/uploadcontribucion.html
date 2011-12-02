@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+Name       : Entangle
+Description: Página para Arquitectura de SW
+Version    : 1.0
+Released   : 20100328
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Entangle</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+	<div id="logo">
+		<h1><a href="home.html">Entangle </a></h1>
+		<p><em> EL lugar para compartir apuntes</em></p>
+	</div>
+	<hr />
+	<!-- end #logo -->
+	<div id="header">
+
+
+		<div id="search">
+			<form method="get" action="">
+				<fieldset>
+				<input type="text" name="s" id="search-text" size="15" />
+				<input type="submit" id="search-submit" value="GO" />
+				</fieldset>
+			</form>
+		</div>
+		<!-- end #search -->
+		<div id="menu">
+			<ul>
+				<li><a href="#">Contacto</a></li>
+			</ul>
+					<!-- end #menu -->
+		</div>
+		
+	</div>
+	<!-- end #header -->
+
+	
+	<!-- end #header-wrapper -->
+	<div id="page">
+		<div id="content">
+		  <div class="post">
+				<h2 class="title"><a href="#">Nueva Contribucion </a></h2>
+					<p class="meta"></p>
+				<div class="entry">
+
+					<form id="contribucion">
+					Autor: <input type="text" name="Autor" /><br />
+					Materia: <input type="text" name="Autor" /><br />
+					Ramo: <input type="text" name="Autor" /><br />
+					Sigla: <input type="text" name="Autor" /><br />
+					Profesor: <input type="text" name="Autor" /><br />
+					Archivo: <input type="file" name="datafile" size="40"><br />
+					<form id="contribucion" method="post" action="mailto:youremail@email.com">
+Tipo Contribución
+<select name="tipo">
+<option>Pdf</option>
+<option>Ppt</option>
+<option>Video</option>
+<option>Doc</option>
+<option>Xls</option>
+</select>
+
+					<br />Ingresa tus comentarios:<br /><textarea name="comentarios" rows="2" cols="30">...Tus comentarios aqu&iacute;...</textarea>
+					<input type="submit" value="Submit" />
+
+					</form>
+
+<script type="text/javascript">
+<!--
+num=0;
+function crear(obj) {
+  num++;
+  fi = document.getElementById('fiel'); // 1
+  contenedor = document.createElement('div'); // 2
+  contenedor.id = 'div'+num; // 3
+  fi.appendChild(contenedor); // 4
+ 
+  ele = document.createElement('input'); // 5
+  ele.type = 'text'; // 6
+  ele.name = 'fil'+num; // 6
+  ele.value = 'Buscar nombre'; // 8
+  contenedor.appendChild(ele); // 7
+  
+    ele = document.createElement('input'); // 5
+  ele.type = 'button'; // 6
+  ele.value = 'Buscar'; // 8
+  ele.name = 'div'+num; // 8
+  //ele.onclick = function () {borrar(this.name)} // 9
+  contenedor.appendChild(ele); // 7
+  
+  ele = document.createElement('input'); // 5
+  ele.type = 'button'; // 6
+  ele.value = 'Borrar'; // 8
+  ele.name = 'div'+num; // 8
+  ele.onclick = function () {borrar(this.name)} // 9
+  contenedor.appendChild(ele); // 7
+}
+function borrar(obj) {
+  fi = document.getElementById('fiel'); // 1 
+  fi.removeChild(document.getElementById(obj)); // 10
+}
+--> 
+</script>
+ <form id="contribucion" method="post" action="algo.php">
+<fieldset id="fiel">
+<input type="button" value="Nueva Referencia:" onclick="crear(this)" />
+</fieldset>
+</form>
+
+
+			</div>
+		  </div>
+		</div><!-- end #content -->
+		<div id="sidebar">
+			<ul>
+				<li>
+					<h2>Acerca</h2>
+					<p>Entangle se basa en los usuarios para poder compartir información acerca de ramos de manera transpartente</p>
+				</li>
+				<li>
+					<h2>Subir Contribución </h2>
+					<ul>
+						<li><a href="uploadcontribucion.html">Nueva Contribución</a></li>
+
+
+					</ul>
+				</li>
+				<li>
+					<h2>Sitios de Interes </h2>
+					<ul>
+						<li><a href="www.uc.cl">Página UC</a></li>
+						<li><a href="www.caiuc.cl">Sitio Web CAI</a></li>
+						<li><a href="www.ing.puc.cl">Ing.puc.cl</a></li>
+						<li><a href="www.entangle.cl">Entangle</a></li>
+
+					</ul>
+				</li>
+				
+				
+			</ul>
+		</div>
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	<!-- end #page -->
+	<div id="footer">
+		<p>Copyright (c) 2011 Entangle.cl All rights reserved. Design by <a href="www.tomas.icaza.com">T.i</a>.</p>
+	</div>
+	<!-- end #footer -->
+</body>
+</html>

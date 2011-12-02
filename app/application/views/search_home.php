@@ -13,10 +13,10 @@
 		<p>Contribuci&oacute;n:<input id="contribucion" name="contribucion" type=text/>
 		 Tipo:<select id="tipo" name="tipo">
 				<option value="">--</option>		 
-				<?php 
-					foreach($tipos as $tipo)
+				<?php 				
+					foreach($tipos['values'] as $tipo)
 					{
-						echo "<option value=\"".$tipo['tipo']."\">".$tipo['tipo']."</option>";
+						echo "<option value=\"".$tipo."\">".$tipo."</option>";
 					}
 				?>
 			  </select>

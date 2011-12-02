@@ -5,7 +5,7 @@ class Search extends CI_Controller
 	{
 		parent::__construct();
 		$this->connection = new Mongo();
-		$this->db = $this->connection->test;
+		$this->db = $this->connection->entangle;
 		
 	}
 
@@ -24,25 +24,48 @@ class Search extends CI_Controller
 		$contribuciones=$this->contribs->find(array('_id'=> new MongoId($data)));		
 		$instancias=array();
 		
-		$this->instancias = $this->db->instancias;
+		$this->instancias = $this->db->submodels;
 		$tipo="";
 		foreach($contribuciones as $instancia)
 		{
-			$instance = $this->instancias->findOne(array('_id' => $instancia['instancia']));
-			$instancia['instancia']=$instance['nombre'];
-			$tipo=$instancia['tipo'];
+			$instance = $this->instancias->findOne(array('_id' => $instancia['submodel']));
+			$instancia['submodel']=$instance['nombre'];
+			$tipo=$instancia['tipoContrib'];
 			array_push($instancias, $instancia);
 		}	
 		
 		
-		$this->load->view('search_result', array('instancias'=>$instancias, 'keyword' => $tipo));
+		$this->load->view('search_result', array('submodelos'=>$instancias, 'keyword' => $tipo));
+	}
+	
+	function get_file()
+	{
+		$data=$this->input->get('id');		
+		$this->fs = $this->db->fs;
+		
+		//$contribuciones=$this->contribs->find();
+		$contribuciones=$this->contribs->find(array('_id'=> new MongoId($data)));		
+		$instancias=array();
+		
+		$this->instancias = $this->db->submodels;
+		$tipo="";
+		foreach($contribuciones as $instancia)
+		{
+			$instance = $this->instancias->findOne(array('_id' => $instancia['submodel']));
+			$instancia['submodel']=$instance['nombre'];
+			$tipo=$instancia['tipoContrib'];
+			array_push($instancias, $instancia);
+		}	
+		
+		
+		$this->load->view('search_result', array('submodelos'=>$instancias, 'keyword' => $tipo));
 	}
 	
 	function search_home()
 	{
 		$this->contribs = $this->db->contribs;		
-		$cursor=$this->contribs->find(array(), array('tipo' => '1'));
-			
+		
+		$cursor=$this->db->command(array('distinct' => 'contribs', 'key' => 'tipoContrib'));			
 		$data['tipos'] = $cursor;
 		
 		$this->load->view('search_home', $data);
@@ -56,19 +79,19 @@ class Search extends CI_Controller
 		$this->contribs = $this->db->contribs;
 		
 		//$contribuciones=$this->contribs->find();
-		$contribuciones=$this->contribs->find(array('metadata.nombre'=> array('$regex' => '.*'.$keyword.'.*', '$options' => 'i'), 'tipo'=> array('$regex' => '.*'.$type.'.*')));
+		$contribuciones=$this->contribs->find(array('metadata.nombre'=> array('$regex' => '.*'.$keyword.'.*', '$options' => 'i'), 'tipoContrib'=> array('$regex' => '.*'.$type.'.*')));	
 		$instancias=array();
 		
-		$this->instancias = $this->db->instancias;
+		$this->submodels = $this->db->submodels;
 		foreach($contribuciones as $instancia)
 		{
-			$instance = $this->instancias->findOne(array('_id' => $instancia['instancia']));
-			$instancia['instancia']=$instance['nombre'];
+			$instance = $this->submodels->findOne(array('_id' => $instancia['submodel']));
+			$instancia['submodel']=$instance['nombre'];
 			array_push($instancias, $instancia);
 		}	
 		
 		
-		$this->load->view('search_result', array('instancias'=>$instancias, 'keyword' => $keyword));
+		$this->load->view('search_result', array('submodelos'=>$instancias, 'keyword' => $keyword));
 	}
 	
 }

@@ -8,38 +8,40 @@
 			//cargar librería, helper y modelo.
 			$this->load->library(array('table', 'form_validation'));
 			$this->load->helper('form', 'url');
-			$this->load->model('circle_model');
-			$this->load->model('user_model');
+			$this->load->model(array('circle_model', 'user_model'));
+			//$this->load->model('user_model');
 		}
 		
 		function index(){
-			
-			//Reglas de validación
-			$this->form_validation->set_rules('name', 'Name', 'callback_circlename_check');
-			$this->form_validation->set_rules('adminname', 'Administrator Name', 'callback_username_exists');
+			self::create();
+		}
+		
+		function create(){
+			//Reglas de validacion
+			$this->form_validation->set_rules('circle_name', 'Name', 'callback_circlename_check');
+			//$this->form_validation->set_rules('adminname', 'Administrator Name', 'callback_username_exists');
 			
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('circle_create_view');
 				return;
 			}
-			
-			self::create();
+			self::createDocument();
 			
 			$this->load->view('circle_create_view_success');
 		}
 		
-		function create(){
-			$i = 1;
-			$data = array(
-				'name' => $this->input->post('name'),
-				'adminname' => $this->input->post('adminname'),
-				'view' => $i,
-				'edit' => $i,
-				'invite' => $i,
-				'member' => $i
+		function createDocument(){
+			$document = array(
+				'name' => $this->input->post('circle_name'),
+				//'adminname' => $this->input->post('adminname'),
+			//permisos por defecto
+				'view' => 1,
+				'edit' => 1,
+				'invite' => 1,
+				'member' => 1
 				);
 						
-			$this->circle_model->add_Circle($data);
+			$this->circle_model->add_Circle($document);
 		}
 		
 		function username_exists($string){

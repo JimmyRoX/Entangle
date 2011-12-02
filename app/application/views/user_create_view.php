@@ -38,6 +38,6 @@
 </p>
 *: Indicates a requiered field.
 <?php echo form_close(); ?>
-</body>
 </div>
+</body>
 </html>

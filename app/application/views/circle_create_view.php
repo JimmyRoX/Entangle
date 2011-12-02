@@ -6,15 +6,16 @@
 </head>
 
 <body>
+<div id="create_circle_form">
 <h3>Create a new Circle</h3>
 
 <?php echo validation_errors(); ?>
 
-<?php echo form_open('circle/index'); ?>
+<?php echo form_open('circle/create'); ?>
 
 <p>
-<label for="name">Name*:</label>
-<input type="text" name="name" id="name" value="<?php echo set_value('name'); ?>"/>
+<label for="circle_name">Name*:</label>
+<input type="text" name="circle_name" id="circle_name" value="<?php echo set_value('name'); ?>"/>
 </p>
 <!--
 <p>
@@ -27,5 +28,6 @@
 </p>
 *: Indicates a required field.
 <?php echo form_close(); ?>
+</div>
 </body>
 </html>

@@ -20,12 +20,12 @@
 
 <p>
 <label for="password">Password*:</label>
-<input type="text" name="password" id="password" value="<?php echo set_value('password'); ?>"/>
+<input type="password" name="password" id="password" value="<?php echo set_value('password'); ?>"/>
 </p>
 
 <p>
 <label for="confirm">Confirm*:</label>
-<input type="text" name="confirm" id="confirm" value="<?php echo set_value('confirm'); ?>"/>
+<input type="password" name="confirm" id="confirm" value="<?php echo set_value('confirm'); ?>"/>
 </p>
 
 <p>
@@ -37,7 +37,7 @@
  <?php echo form_submit('submit','Register new account'); ?> <input type="reset" value="Reset fields"/>
 </p>
 *: Indicates a requiered field.
-<?php echo form_close()?>
+<?php echo form_close(); ?>
 </body>
 </div>
 </html>

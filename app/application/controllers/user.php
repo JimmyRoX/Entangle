@@ -6,7 +6,7 @@
 			parent::__construct();
 			
 			//cargar librería, helper y modelo.
-			$this->load->library(array('table','form_validation'));
+			$this->load->library(array('table', 'form_validation'));
 			$this->load->helper('form', 'url');
 			$this->load->model('user_model');
 		}
@@ -25,8 +25,7 @@
 			$this->form_validation->set_rules('confirm', 'Confirm', 'required|matches[password]');
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 			
-			if ($this->form_validation->run() == FALSE)
-			{
+			if ($this->form_validation->run() == FALSE){
 				$this->load->view('user_create_view');
 				return;
 			}
@@ -43,7 +42,9 @@
 				'name' => $this->input->post('name'),
 				'password' => $this->input->post('password'),
 				'email' => $this->input->post('email'),
-				'acl' => array()
+				'acl' => array(
+				//colocar default circle?
+				)
 			);		
 			$this->user_model->add_User($document);
 		}
@@ -67,7 +68,7 @@
 		function username_check($string){
 			
 			if ($string == 'test'){
-				$this->form_validation->set_message('username_check', 'The %s field can not be the word "test"');
+				$this->form_validation->set_message('username_check', 'The %s field can not be the word "test".');
 				return FALSE;
 			}
 			

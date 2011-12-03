@@ -8,7 +8,7 @@ class Modelo extends CI_Controller {
 		
 		$m = new Mongo();
 		$this->db = $m->entangle;
-		$this->modelos = $this->db->modelos;
+		$this->modelos = $this->db->models;
 	}
 
 	public function index()
@@ -92,14 +92,18 @@ class Modelo extends CI_Controller {
 		redirect('modelo/show');
 	}
 
+	//Tipo de Contribucion en json 
 	public function contribucion_json()
 	{
-		$modelo_id = new MongoId($this->input->get('modelo_id'));
+		$submodel_id = new MongoId($this->input->get('submodel_id'));
 		$contrib_nombre = $this->input->get('contrib_nombre');
-		if($modelo_id && $contrib_nombre) {
-			$modelo = $this->modelos->findOne(array('_id' => $modelo_id));
+		if($submodel_id && $contrib_nombre) {
+			$submodel = $this->db->submodels->findOne(array('_id' => $submodel_id));
+			$model = $this->modelos->findOne(array('_id' => $submodel['model']));
 
-			foreach($modelo['contrib'] as $contrib)
+			$contribs = array();
+
+			foreach($model['tipoContrib'] as $contrib)
 			{
 				
 				if($contrib['nombre'] == $contrib_nombre)
@@ -108,15 +112,17 @@ class Modelo extends CI_Controller {
 		}
 	}
 
+	//Lista de nombres en json de los tipos de contribucion de un modelo dado
 	public function contribuciones_json()
 	{
-		$modelo_id = new MongoId($this->input->get('modelo_id'));
-		if($modelo_id) {
-			$modelo = $this->modelos->findOne(array('_id' => $modelo_id));
-	
+		$submodel_id = new MongoId($this->input->get('submodel_id'));
+		if($submodel_id) {
+			$submodel = $this->db->submodels->findOne(array('_id' => $submodel_id));
+			$model = $this->modelos->findOne(array('_id' => $submodel['model']));
+
 			$contribs = array();
 
-			foreach($modelo['contrib'] as $contrib)
+			foreach($model['tipoContrib'] as $contrib)
 			{
 				
 				array_push($contribs,$contrib['nombre']);

@@ -5,7 +5,7 @@ class instancia extends CI_Controller
 	{
 		parent::__construct();
 		$this->connection = new Mongo();
-		$this->db = $this->connection->test;
+		$this->db = $this->connection->entangle;
 		
 	}
 

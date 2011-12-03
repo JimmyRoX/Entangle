@@ -9,7 +9,6 @@
 			$this->load->library(array('table', 'form_validation'));
 			$this->load->helper('form', 'url');
 			$this->load->model(array('circle_model', 'user_model'));
-			//$this->load->model('user_model');
 		}
 		
 		function index(){
@@ -19,7 +18,6 @@
 		function create(){
 			//Reglas de validacion
 			$this->form_validation->set_rules('circle_name', 'Name', 'callback_circlename_check');
-			//$this->form_validation->set_rules('adminname', 'Administrator Name', 'callback_username_exists');
 			
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('circle_create_view');
@@ -33,7 +31,6 @@
 		function createDocument(){
 			$document = array(
 				'name' => $this->input->post('circle_name'),
-				//'adminname' => $this->input->post('adminname'),
 			//permisos por defecto
 				'view' => 1,
 				'edit' => 1,
@@ -82,7 +79,6 @@
 		function editDocument(){
 			$document = array(
 							'name' => $this->input->post('circle_name'),
-			//'adminname' => $this->input->post('adminname'),
 			//permisos por defecto
 							'view' => 1,
 							'edit' => 1,

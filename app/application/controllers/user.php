@@ -16,8 +16,6 @@
 		}
 		
 		function signup(){
-			//$this->load->helper(array('form', 'url'));
-			//$this->load->library('form_validation');
 			
 			//reglas de validación.
 			$this->form_validation->set_rules('name', 'Name', 'callback_username_check');
@@ -33,7 +31,6 @@
 			self::create();
 			
 			$this->load->view('user_create_view_success');
-			//$this->load->view('user_create_view');
 		}
 		
 		//Registramos al usuario

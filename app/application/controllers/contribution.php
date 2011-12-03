@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Contribucion extends CI_Controller {
+class Contribution extends CI_Controller {
 
 	public function __construct()
 	{
@@ -8,7 +8,13 @@ class Contribucion extends CI_Controller {
 		
 		$m = new Mongo();
 		$this->db = $m->entangle;
-		$this->instancias = $this->db->instancias;
+		
+		$this->load->model('contribution_model');
+		$this->load->model('submodel_model');
+		$this->load->model('user_model');
+
+		$this->grid = $this->db->getGridFS();
+
 	}
 
 	public function index()
@@ -21,69 +27,97 @@ class Contribucion extends CI_Controller {
 	{
 		if($this->input->post('add'))
 		{
-			$instancia_id = new MongoId($this->uri->segment(3));
+			$contrib = $this->input->post();
 
-			$contribucion = $this->input->post();
+			$contrib['submodel'] = new MongoId($contrib['submodel']);
+			
+			if($contrib['is_file']=="true")
+			{
+				$name = $_FILES['content']['name'];
+				$fileId = $this->grid->storeUpload('content',$name);
+				$contrib['content'] = $fileId;
+			}
+			unset($contrib['is_file']);
+			unset($contrib['add']);			
+			
+			$this->contribution_model->add_Contribution($contrib);
 
-			$change = array('$push'=>
-					array('contribuciones'=> $contribucion
-					)
-			);
-			$instancia = $this->db->instancias->update(
-				array('_id' => $instancia_id),
-				$change
-			);
-
-			$this->instancias->insert($contribucion);
-			redirect('add');	
+			redirect('contribution');	
 			return;
 		}
 		$data = array();
-		$data['admin'] = array('hugo', 'paco', 'luis');
-		$data['title'] = 'Subir Contribución';
+		
+		$user = $this->user_model->get_User($this->session->userdata('username'));
 
-		//$modelo_id = new MongoId($this->uri->segment(3));
-		//$modelo = $this->db->modelos->findOne(array('_id' => $modelo_id));
-		//$data['modelo'] = $modelo;
-
-		$modelos = array();
-		foreach($this->db->modelos->find() as $modelo)
+		$submodelsDocs = array();
+		foreach($user['acl'] as $circleId)
 		{
-			array_push($modelos,array(
-				"nombre"=> $modelo['nombre'],
-				"id"=> $modelo['_id']
+			$submodelsResults = $this->db->submodels->find(array('circle.acl' => $circleId['circle']));
+	
+			while($submodelsResults->hasNext())
+			{
+				array_push($submodelsDocs,$submodelsResults->getNext());
+			}
+			
+		}		
+
+
+		$submodels = array();
+		foreach($submodelsDocs as $submodel)
+		{
+			array_push($submodels,array(
+				"nombre"=> $submodel['nombre'],
+				"id"=> $submodel['_id']
 			));
 		}
-		$data['modelos']=$modelos;
-
+		$data['submodels']=$submodels;
+		
 		$this->load->view('add_contribucion.php', $data);
 	}
-
-	public function show($modelo_id)
+	
+	public function add_reference()
 	{
-		$contribuciones = $this->instancias->find(array("modelo"=>$modelo_id));
+	}
+	
+	public function show()
+	{
+		$data = array();
+		
+		$user = $this->user_model->get_User($this->session->userdata('username'));
 
-		$list = array();
-
-		foreach($modelos as $m)
+		$submodelsDocs = array();
+		foreach($user['acl'] as $circleId)
 		{
-			$list[] = array('nombre' => $m['nombre']);
-		} 
+			$submodelsResults = $this->db->submodels->find(array('circle.acl' => $circleId['circle']));
+	
+			while($submodelsResults->hasNext())
+			{
+				array_push($submodelsDocs,$submodelsResults->getNext());
+			}
+			
+		}		
 
-		$this->load->view('list_contribucion', array('contribucion' => $list));
+
+		$submodels = array();
+		foreach($submodelsDocs as $submodel)
+		{
+			array_push($submodels,array(
+				"nombre"=> $submodel['nombre'],
+				"id"=> $submodel['_id']
+			));
+		}
+		$data['submodels']=$submodels;
+
+		$this->load->view('list_contributions', $data);
 
 	}
 
-	public function view($name = null)
+	public function view($id = null)
 	{
-		
-		if($name) {
-			$contribucion = $this->instancias->findOne( array('contrib' => $name));
-			if($contribucion)
-			{
-				$this->load->view('view_contribucion', array('contribucion' => $contribucion));
-				return;
-			}
+		if($id) {
+			$contribution = $this->contribution_model->get_Contribution($id);
+			$this->load->view('view_contribucion', array('contribucion' => $contribution));
+			return;
 		}
 
 		show_404();
@@ -91,14 +125,37 @@ class Contribucion extends CI_Controller {
 
 
 
-	public function delete($name = null)
+	public function delete($id = null)
 	{
-		if($name)
+		if($id)
 		{
-			$this->modelos->remove(array('nombre' => $name));
+			$this->contribution_model->delete_Contribution($id);
 		}
 
-		redirect('contribucion/show');
+		redirect('contribution');
+	}
+
+	//Listado de contribuciones en un submodelo dado
+	public function contributions_json()
+	{
+		$submodel_id = new MongoId($this->input->get('submodel_id'));
+
+		if($submodel_id) {
+			$contribsDocs = $this->db->contribs->find(array('submodel' => $submodel_id));
+
+			$contribs = array();
+
+			while($contribsDocs->hasNext())
+			{
+				$contrib = $contribsDocs->getNext();
+				array_push($contribs,array(
+					"nombre"=> $contrib['metadata']['nombre'],
+					"id"=> $contrib['_id'].""
+				));
+					
+			}
+			echo json_encode($contribs);
+		}
 	}
 
 

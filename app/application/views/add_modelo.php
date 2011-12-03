@@ -20,9 +20,9 @@
     <p>
         <label>
             admin
-            <select name="admin[]" multiple required>
-            <?php foreach($admin as $name): ?>
-                <option><?php echo($name); ?></option>
+            <select name="circle[]" multiple required>
+            <?php foreach($admin as $circle): ?>
+                <option value="<?php echo $circle['_id']?>"><?php echo($circle['name']); ?></option>
             <?php endforeach; ?>
             </select>
         </label>
@@ -45,7 +45,18 @@
 
         <fieldset class="contrib"><legend>contribución</legend><p>
             <label>nombre<input type="text" name="nombre" required /></label>
-            <label>template<input type="text" name="template" required/></label></p>
+            <label>widget (browsing)<input type="file" name="widget_browsing" required/></label>
+            <label>widget (display)<input type="file" name="widget_display" required/></label>
+            <div><label>tipo contribucion
+                <select name="content">
+                    <option>string</option>
+                    <option value="text">texto</option>
+                    <option value="file">archivo</option>
+                    <option>url</option>
+                </select>
+            </label></div>
+            </p>
+
             <fieldset class="metadata">
                 <legend>metadata <a href="#">+</a></legend>
 
@@ -58,9 +69,10 @@
 
 
         <div class="metadata">
-        <label>nombre<input type="text" name="nombre" required/></label>
+        <label>nombre<input type="text" name="name" required/></label>
         <label>tipo
                 <select name="tipo" required> 
+                    <option value="string">string</option> 
                     <option value="text">texto</option> 
                     <option value="number">número</option> 
                     <option value="datetime">fecha/hora</option> 
@@ -68,12 +80,26 @@
                     <option value="file">archivo</option>
                 </select>
         </label>
+        <label class="widget"><input type="file" name="widget"></label>
+        </div>
+
+        <div class="metadata_ref">
+        <label>nombre<input type="text" name="name" required/></label>
+        <label>tipo
+                <select name="tipo" required>
+                    <option value="text">texto</option> 
+                    <option value="number">número</option> 
+                    <option value="datetime">fecha/hora</option> 
+                    <option value="url">url</option>
+                    <option value="file">archivo</option>
+                </select>
+        </label>
+        <label><input type="file" name="widget"></label>
         </div>
 
         <fieldset class="ref">
-            <label>nombre <input type="text" name="nombre" required></label>
-            <label>tipo destino <input type="text" name="tipo_dest" required></label>
-            <label>template <input type="text" name="template" required></label>
+            <label>nombre <input type="text" name="name" required></label>
+            <label>tipo destino <input type="text" name="tipo_destino" required></label>
             <fieldset class="metadata">
                 <legend>metadata <a href="#">+</a></legend>
             </fieldset>

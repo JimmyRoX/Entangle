@@ -8,7 +8,8 @@ class Modelo extends CI_Controller {
 		
 		$m = new Mongo();
 		$this->db = $m->entangle;
-		$this->modelos = $this->db->modelos;
+		$this->modelos = $this->db->models;
+		$this->grid = $this->db->getGridFS();
 	}
 
 	public function index()
@@ -33,7 +34,7 @@ class Modelo extends CI_Controller {
 			{
 				$c = array();
 				$c['nombre'] = $contrib['nombre'];
-				$c['template']= $contrib['template'];
+				//$c['template']= $contrib['template'];
 
 				$c['metadata'] = $contrib['metadata'];
 				$c['ref'] = $contrib['ref'];
@@ -47,7 +48,7 @@ class Modelo extends CI_Controller {
 		}
 
 		$data = array();
-		$data['admin'] = array('hugo', 'paco', 'luis');
+		$data['admin'] = $this->db->circles->find();
 		$data['title'] = 'Crear modelo';
 
 		$this->load->view('add_modelo.php', $data);
@@ -72,9 +73,21 @@ class Modelo extends CI_Controller {
 	{
 		if($name) {
 			$modelo = $this->modelos->findOne( array('nombre' => $name));
+			
+			$data['modelo'] = $modelo;
+
+
+
+			foreach($modelo['tipoContrib'] as $contrib)
+			{
+				$contrib['widget_browsing'] = $this->grid->findOne($contrib['widget_browsing']);
+				$contrib['widget_display'] = $this->grid->findOne($contrib['widget_display']);
+			}
+
 			if($modelo)
 			{
-				$this->load->view('view_modelo', array('modelo' => $modelo));
+
+				$this->load->view('view_modelo', $data);
 				return;
 			}
 		}

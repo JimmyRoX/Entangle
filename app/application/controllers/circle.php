@@ -39,8 +39,7 @@
 				'edit' => 1,
 				'invite' => 1,
 				'member' => 1
-				);
-						
+				);		
 			$this->circle_model->add_Circle($document);
 		}
 		
@@ -67,6 +66,30 @@
 				return FALSE;
 			}
 			return TRUE;
+		}
+		
+		function update(){
+			$this->form_validation->set_rules('circle_name', 'Name', 'callback_circlename_check');	
+			
+			if ($this->form_validation->run() == FALSE){
+				$this->load->view('circle_create_view');
+				return;
+			}
+			self::editDocument();
+			$this->load->view('circle_create_view');
+		}
+		
+		function editDocument(){
+			$document = array(
+							'name' => $this->input->post('circle_name'),
+			//'adminname' => $this->input->post('adminname'),
+			//permisos por defecto
+							'view' => 1,
+							'edit' => 1,
+							'invite' => 1,
+							'member' => 1
+			);
+			$this->circle_model->update_Circle($document);
 		}
 		
 	}

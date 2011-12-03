@@ -8,7 +8,7 @@
 			//cargar librería, helper y modelo.
 			$this->load->library(array('table', 'form_validation'));
 			$this->load->helper('form', 'url');
-			$this->load->model('user_model');
+			$this->load->model(array('user_model', 'circle_model'));
 		}
 		
 		function index(){
@@ -38,12 +38,17 @@
 		
 		//Registramos al usuario
 		function create(){
+			//getting default circle
+			$def_circle = $this->circle_model->get_Circle("cursos");
+			$id = new MongoID($def_circle['_id']);
+			
 			$document = array(
 				'name' => $this->input->post('name'),
 				'password' => $this->input->post('password'),
 				'email' => $this->input->post('email'),
 				'acl' => array(
-				//colocar default circle?
+				//asignamos el circulo cursos por default
+				0 => array('circle' => $id)
 				)
 			);		
 			$this->user_model->add_User($document);
@@ -81,7 +86,7 @@
 			return TRUE;
 		}
 		
-		function update(){	
+		function update(){
 		}
 			
 	}

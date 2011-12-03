@@ -7,15 +7,16 @@
     <script type="text/javascript" src="<?php echo base_url('script/jquery-1.7.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo base_url('script/contribucionform.js') ?>"></script>
 
-    <form action="#<?php //echo base_url('contribucion/add') ?>" method="post">
-    <h1><?php echo $title ?></h1>
+    <form id="contrib_form" action="<?php echo base_url('contribution/add') ?>" method="post">
+    <input type="hidden" value="false" name="is_file" id="is_file" />
+    <h1>Subir Contribuci&oacute;n</h1>
     <p>
         <label>
-            Modelo (TODO: reemplazar con circulos - instancias de modelos)
-            <select name="modelo" id="modelo" required>
+            SubModelo
+            <select name="submodel" id="submodel" required>
 		<option selected="selected"></option>
-            <?php foreach($modelos as $modelo): ?>
-                <option value="<?php echo($modelo['id']); ?>"><?php echo($modelo['nombre']); ?></option>
+            <?php foreach($submodels as $submodel): ?>
+                <option value="<?php echo($submodel['id']); ?>"><?php echo($submodel['nombre']); ?></option>
             <?php endforeach; ?>
             </select>
         </label>
@@ -27,15 +28,14 @@
     <p>
         <label>
             Tipo de contribucion
-            <select name="tipo" id="tipo" required>
+            <select name="tipoContrib" id="tipoContrib" required>
 		<option selected="selected"></option>
             </select>
         </label>
     </p>
     <p>
-        <label>
-            nombre
-            <input type="text" name="nombre" required>
+        <label id="content_label">
+            contenido
         </label>
     </p>
     <hr >

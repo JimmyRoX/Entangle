@@ -40,25 +40,14 @@ class Search extends CI_Controller
 	
 	function get_file()
 	{
-		$data=$this->input->get('id');		
-		$this->fs = $this->db->fs;
-		
-		//$contribuciones=$this->contribs->find();
-		$contribuciones=$this->contribs->find(array('_id'=> new MongoId($data)));		
-		$instancias=array();
-		
-		$this->instancias = $this->db->submodels;
-		$tipo="";
-		foreach($contribuciones as $instancia)
-		{
-			$instance = $this->instancias->findOne(array('_id' => $instancia['submodel']));
-			$instancia['submodel']=$instance['nombre'];
-			$tipo=$instancia['tipoContrib'];
-			array_push($instancias, $instancia);
-		}	
-		
-		
-		$this->load->view('search_result', array('submodelos'=>$instancias, 'keyword' => $tipo));
+		$id=$this->input->get('id');				
+			
+		$grid = $this->db->getGridFS();
+		$file = $grid->get(new MongoId($id));
+				
+		$cursor = $this->db->fs->chunks->find(array("files_id" => $id))->sort(array("n" => 1));
+		//$this->load->view('search_result', array('files' => 'asd'));
+		$this->load->view('get_file', array('file' => $file, 'cursor'=>$cursor));
 	}
 	
 	function search_home()

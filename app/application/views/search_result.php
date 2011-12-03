@@ -17,7 +17,9 @@
 				echo '<p><em>'.$contribucion['submodel'].' -- <strong>'.$contribucion['metadata']['nombre'].'</strong></em><br/>';
 				
 				//Si es algun file hacemos un enlace
-				if ($contribucion['tipoContrib']=="paper" || $contribucion['tipoContrib']=="clase" || $contribucion['tipoContrib']=="video" || $contribucion['tipoContrib']=="audio")
+				if ($contribucion['tipoContrib']=="paper" || $contribucion['tipoContrib']=="clase")
+					echo $contribucion['tipoContrib'].': <a href=get_file/?id='.$contribucion['_id'].' target=_blank>'.$contribucion['content'].'</a><br/>';
+				else if ($contribucion['tipoContrib']=="video" || $contribucion['tipoContrib']=="audio")
 					echo $contribucion['tipoContrib'].': <a href='.$contribucion['content'].' target=_blank>'.$contribucion['content'].'</a><br/>';
 				else			
 					echo $contribucion['tipoContrib'].': '.$contribucion['content'].'<br/>';
@@ -71,8 +73,7 @@
 				
 				echo '</div>';	
 			 }			 
-			 
-		 		
+			 		 		
 		?>
 		
 	</body>

@@ -17,7 +17,8 @@
 		$( "#tabs" ).tabs({
 			ajaxOptions: {
 				<?php if(isset($widget_file)) { ?>
-				data: { widget_file: "<?php echo $widget_file; ?>" },
+				data: { widget_file: "<?php echo $widget_file; ?>",
+					widget_type: "<?php echo $widget_type; ?>" },
 				type : "post",
 				<?php } ?>
 				error: function( xhr, status, index, anchor ) {

@@ -115,9 +115,53 @@ if(isset($widget_file)) {
 		while (($buffer = fgets($handle)) !== false) {
 			$str .= $buffer."\n";
 		}
+	if($widget_type=="browsing") {
+		//mouseover asdfasdf
+		?>
+		<script>
+	$(function() {
+		$( "#mouseDialog" ).dialog({
+			autoOpen: false,
+			maxWidth: 800,
+			minWidth: 400
+		});
+		$('a.mouseMe').live('mouseenter', function(e) {
+		    var url = "<?php echo base_url();?>index.php/widget/popup"
+		    var title = "Mouseover Dialog";
+		    var dialog = $("#mouseDialog");
+		    //if ($("#dialog").length == 0) {
+		        //dialog = $('<div id="dialog"></div>').appendTo('body');
+		    //} 
+		    var x = e.pageX+10;
+		    var y = e.pageY+18;
+		    //var y = jQuery(this).position().bottom;
+		    
+		    $( "#mouseDialog" ).dialog('open');
+		    $( "#mouseDialog" ).dialog('option','position', [x,y]);
+		    $( "#mouseDialog" ).dialog('option','title', title);
+		    //$( "#mouseDialog" ).dialog('option','maxWidth', 600);
 
-	echo "<p>holi</p>";
+
+		});
+				
+		$( "a.mouseMe" ).mouseleave(function() {
+			$( "#mouseDialog" ).dialog( "close" );
+			return false;
+		});
+	});
+
+		</script>
+		<div id="mouseDialog" style="display:none">
+		<?php
+		echo eval(' ?>'.widget_to_php($str).'<?php ');
+		?>
+		</div>
+		<a href="" class="mouseMe">MouseOver me!</a>
+		<?php
+	}
+	else {
 	echo eval(' ?>'.widget_to_php($str).'<?php ');
+	}
 }
 
 ?>

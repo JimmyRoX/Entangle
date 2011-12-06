@@ -9,7 +9,8 @@ class Widget extends CI_Controller
 	function content() 
 	{
 		if(($data['widget_file'] = $this->input->post('widget_file')) != "") {
-			$this->load->helper('widget_parser');			
+			$data['widget_type'] = $this->input->post('widget_type');
+			$this->load->helper('widget_parser');
 			$this->load->view('content_widget', $data);	
 		}
 		else $this->load->view('content_widget');

@@ -1,13 +1,24 @@
 $(function(){
+
+
+$("select#submodel option[selected]").removeAttr("selected");
+$("select#submodel option[value='']").attr("selected", "selected");
+$("#content_label").hide();
+
 $("#submodel").change(function(){
 	var id = $("#submodel").val();
+
+	//Hacemos reset de los campos
+	$("#content_label").hide();	
+	$("#metadata").html("");	
+	$("#tipoContrib").html('<option selected="selected">Elije el tipo de contribución</option>');
 	
 	$.get("../../modelo/contribuciones_json/", { 'submodel_id': id},
-	 function(data){
-	   $("#tipoContrib").html('<option selected="selected"></option>');
-	   jQuery.each(data, function(i, val){
-		$("#tipoContrib").append("<option>"+val+"</option>");
-	   });
+		 function(data){
+		   //Añadimos los tipos de contribuciones al combobox
+		   jQuery.each(data, function(i, val){
+			$("#tipoContrib").append("<option>"+val+"</option>");
+		   });
 	 }, "json");
 
 
@@ -16,6 +27,10 @@ $("#submodel").change(function(){
 
 $("#tipoContrib").change(function(){
 	var type = $("#tipoContrib").val();
+
+	//Resetiamos los campos
+	$("#metadata").html("");
+	$("#content_label").hide();
 
 	$.get("../../modelo/contribucion_json/", { 'submodel_id': $("#submodel").val(), 'contrib_nombre': type},
 	 function(data){
@@ -53,30 +68,57 @@ function updateForm(contrib)
 		$("#is_file").val("true");
 		
 	}
+	$("#content_label").show();
 
+	//Actualizamos los campos de metadata
 	$("#metadata").html("");
 	jQuery.each(contrib.metadata, function(i, val) {
 
-		if(val.tipo == "string")
-			$("#metadata").append('<p><label>'+val.name+'</label> <input type="text" name="metadata['+val.name+']" required /></p>');
-		else if(val.tipo == "longtext")
-			$("#metadata").append('<p><label>'+val.name+'</label> <textarea name="metadata['+val.name+']" required /></p>');
-		else if(val.tipo == "url")
-			$("#metadata").append('<p><label>'+val.name+'</label> <input type="url" name="metadata['+val.name+']" required /></p>');
-		else if(val.tipo == "number")
-			$("#metadata").append('<p><label>'+val.name+'</label> <input type="number" name="metadata['+val.name+']" required /></p>');
-		else if(val.tipo == "date")
-			$("#metadata").append('<p><label>'+val.name+'</label> <input type="date" name="metadata['+val.name+']" required /></p>');
-		else if(val.tipo == "file")
-		{
-			$("#metadata").append('<p><label>'+val.name+'</label> <input type="file" name="[metadata]['+val.name+']" required /></p>');
-		}
+		addMetadataField(val.name, val.tipo);
 
 	});
 
 }
 
+function addMetadataField(name, type)
+{
+	if(type == "string")
+		$("#metadata").append('<p><label>'+name+'</label> <input type="text" name="metadata['+
+		name+']" required /></p>');
+	else if(type == "longtext")
+		$("#metadata").append('<p><label>'+name+'</label> <textarea name="metadata['+
+		name+']" required /></p>');
+	else if(type == "url")
+		$("#metadata").append('<p><label>'+name+'</label> <input type="url" name="metadata['+
+		name+']" required /></p>');
+	else if(type == "number")
+		$("#metadata").append('<p><label>'+name+'</label> <input type="number" name="metadata['+
+		name+']" required /></p>');
+	else if(type == "date")
+		$("#metadata").append('<p><label>'+name+'</label> <input type="date" name="metadata['+
+		name+']" required /></p>');
+}
 
+$("#tipoRef").change(function(){
+	//Obtenemos el tipo de referencia
+	var type = $("#tipoRef").val();
+
+	$.get("../../contribution/reference_json/"+$("#contrib").val(), { 'tipoRef': type},
+	 function(data){
+		$("#target").html('<option selected="selected">Elije la contribución objetivo...</option>');
+		jQuery.each(data.contribs, function(i, val){
+			$("#target").append("<option value="+val.id+">"+val.name+"</option>");
+		});
+		$("#metadata").html("");
+		jQuery.each(data.metadata, function(i, val) {
+
+			addMetadataField(val.name, val.tipo);
+
+		});
+	 }, "json");
+
+
+});
 
 
 });

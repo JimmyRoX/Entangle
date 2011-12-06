@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo $title ?></title>
+    <title>Subir Contribuci&oacute;n</title>
 </head>
 <body>
     <script type="text/javascript" src="<?php echo base_url('script/jquery-1.7.min.js') ?>"></script>
@@ -14,7 +14,7 @@
         <label>
             SubModelo
             <select name="submodel" id="submodel" required>
-		<option selected="selected"></option>
+		<option selected="selected">Elije Submodelo...</option>
             <?php foreach($submodels as $submodel): ?>
                 <option value="<?php echo($submodel['id']); ?>"><?php echo($submodel['nombre']); ?></option>
             <?php endforeach; ?>
@@ -22,14 +22,11 @@
         </label>
     </p>
 
-
-
-    <input type="submit" name="add" value="Subir">
     <p>
         <label>
             Tipo de contribucion
             <select name="tipoContrib" id="tipoContrib" required>
-		<option selected="selected"></option>
+		<option selected="selected">Elije el tipo de contribuci&oacute;n...</option>
             </select>
         </label>
     </p>
@@ -38,13 +35,11 @@
             contenido
         </label>
     </p>
-    <hr >
-    <h2>Metadata</h2>
     <div class="metadata" id="metadata">
     </div>
 
     </form>
-
+    <input type="submit" name="add" value="Subir">
 
 </body>
 </html>

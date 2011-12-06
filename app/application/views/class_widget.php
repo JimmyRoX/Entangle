@@ -16,6 +16,11 @@
 	$(function() {
 		$( "#tabs" ).tabs({
 			ajaxOptions: {
+				<?php if(isset($widget_file)) { ?>
+				data: { widget_file: "<?php echo $widget_file; ?>",
+					widget_type: "<?php echo $widget_type; ?>" },
+				type : "post",
+				<?php } ?>
 				error: function( xhr, status, index, anchor ) {
 					$( anchor.hash ).html(
 						"Couldn't load this tab. We'll try to fix this as soon as possible. " +
@@ -35,9 +40,6 @@
 <tr><td colspan="2"><div id="tabs">
 	<ul>
 		<li><a href="<?php echo base_url();?>index.php/widget/content" title="Principal Overview"><span>Content 1</span></a></li>
-		<li><a href="<?php echo base_url();?>index.php/model/index" title="Principal Overview">Modelo</a></li>
-		<li><a href="<?php echo base_url();?>index.php/model/index" title="Principal Overview"><span>Modelo 2</span></a></li>
-
 	</ul>
 </div>
 </td></tr>

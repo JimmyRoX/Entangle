@@ -24,7 +24,7 @@
 			autoOpen: false
 		});
 		$('a.articlePopup').live('mouseenter', function(e) {
-		    var url = this.href;
+		    var url = "<?php echo base_url();?>index.php/widget/popup"
 		    var title = this.title;
 		    var dialog = $("#dialog");
 		    //if ($("#dialog").length == 0) {
@@ -51,7 +51,7 @@
 		});
 		$('a.articlePopup').live('click', function() {
 		    var url = this.href;
-		    var mainTab = $("#Principal_Overview");
+		    var mainTab = $("#TabDiv");
 		    $("#dialog").dialog('close');
 		    //if ($("#dialog").length == 0) {
 		        //dialog = $('<div id="dialog"></div>').appendTo('body');
@@ -75,38 +75,120 @@
 			$( "#dialog" ).dialog( "close" );
 			return false;
 		});
-		
+		/*$('#widget_submit').submit(function() { // catch the form's submit event - should I use the form id?
+    			$.ajax({ // create an AJAX call...
+       		 	data: $(this).serialize(), // get the form data
+       			type: $(this).attr('method'), // GET or POST
+        		url: $(this).attr('action'), // the file to call
+        		success: function(response) { // on success..
+            			$('#TabDiv').html(response); // update the DIV - should I use the DIV id?
+        		}
+			
+			});
+			return false; // cancel original event to prevent form submitting
+			});*/
+
 
 	});
+	
+	
 		
 	</script>
     
 </head>
 <body>
 <table width="100%">
-<tr><td><div id="Principal_Overview">Aca va El contenido Principal</div>
+<tr><td valign="top"><div id="TabDiv" valign="top">
+<form enctype="multipart/form-data" accept-charset="utf-8" method="post" action="upload">
+Subir nuevo Widget y probar<br/><br/>
+<input type="file" name="userfile" id="widget_file"/><br /><br/>
+<input type="radio" name="widget_type" id="widget_type" value="browsing" /> Browsing
+<input type="radio" name="widget_type" id="widget_type" value="display" checked/> Displaying<br/>
+<br/>
+<input type="submit" name="Subir" id="widget_submit"/>
+</form>
 
+<?php
+if(isset($widget_file)) {
+		$handle = fopen($widget_file,"r");
+		$str = "";
+		while (($buffer = fgets($handle)) !== false) {
+			$str .= $buffer."\n";
+		}
+	if($widget_type=="browsing") {
+		//mouseover asdfasdf
+		?>
+		<script>
+	$(function() {
+		$( "#mouseDialog" ).dialog({
+			autoOpen: false,
+			maxWidth: 800,
+			minWidth: 400
+		});
+		$('a.mouseMe').live('mouseenter', function(e) {
+		    var url = "<?php echo base_url();?>index.php/widget/popup"
+		    var title = "Mouseover Dialog";
+		    var dialog = $("#mouseDialog");
+		    //if ($("#dialog").length == 0) {
+		        //dialog = $('<div id="dialog"></div>').appendTo('body');
+		    //} 
+		    var x = e.pageX+10;
+		    var y = e.pageY+18;
+		    //var y = jQuery(this).position().bottom;
+		    
+		    $( "#mouseDialog" ).dialog('open');
+		    $( "#mouseDialog" ).dialog('option','position', [x,y]);
+		    $( "#mouseDialog" ).dialog('option','title', title);
+		    //$( "#mouseDialog" ).dialog('option','maxWidth', 600);
+
+
+		});
+				
+		$( "a.mouseMe" ).mouseleave(function() {
+			$( "#mouseDialog" ).dialog( "close" );
+			return false;
+		});
+	});
+
+		</script>
+		<div id="mouseDialog" style="display:none">
+		<?php
+		echo eval(' ?>'.widget_to_php($str).'<?php ');
+		?>
+		</div>
+		<a href="" class="mouseMe">MouseOver me!</a>
+		<?php
+	}
+	else {
+	echo eval(' ?>'.widget_to_php($str).'<?php ');
+	}
+}
+
+?>
+
+
+</div>
 </td>
 <td width="400px">
 <ul id="sortable">
 	<li class="ui-state-default"><div id="sidewidget"><h3><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Artículos relacionados</h3>
 		<ul>
-		<li><span class="ui-icon ui-icon-note"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/popup" title="Artículo Uno">Artículo uno</a></li>
-		<li><span class="ui-icon ui-icon-note"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/popup" title="Artículo Dos">Artículo Dos</a></li>
+		<li><span class="ui-icon ui-icon-note"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/subject" title="Artículo Uno">Artículo uno</a></li>
+		<li><span class="ui-icon ui-icon-note"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/subject" title="Artículo Dos">Artículo Dos</a></li>
 		</ul>
 		</div>
 	</li>
 	<li class="ui-state-default"><div id="sidewidget"><h3><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Usuarios Online</h3>
 		<ul>
-		<li><span class="ui-icon ui-icon-power"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/popup" title="Usuario Uno">Usuario uno</a></li>
-		<li><span class="ui-icon ui-icon-power"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/popup" title="Usuario Dos">Usuario Dos</a></li>
+		<li><span class="ui-icon ui-icon-power"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/subject" title="Usuario Uno">Usuario uno</a></li>
+		<li><span class="ui-icon ui-icon-power"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/subject" title="Usuario Dos">Usuario Dos</a></li>
 		</ul>
 		</div>
 	</li>
 	<li class="ui-state-default"><div id="sidewidget"><h3><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Ejemplos de Referencias</h3>
 		<ul>
-		<li><span class="ui-icon ui-icon-circle-arrow-e"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/popup" title="Referencia">Referencia uno</a></li>
-		<li><span class="ui-icon ui-icon-circle-arrow-e"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/popup" title="Referencia">Referencia dos</a></li>
+		<li><span class="ui-icon ui-icon-circle-arrow-e"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/subject" title="Referencia">Referencia uno</a></li>
+		<li><span class="ui-icon ui-icon-circle-arrow-e"></span><a class="articlePopup" href="<?php echo base_url();?>index.php/widget/subject" title="Referencia">Referencia dos</a></li>
 		</ul>
 		</div>
 	</li>

@@ -18,12 +18,12 @@
                 <div>nombre: <?php echo $contrib['nombre']; ?> <p> tipo de contenido: <?php echo $contrib['content'] ?> </p></div>
                 <fieldset>
                 <legend>widget browsing</legend>
-                <pre><?php echo print_r($contrib['widget_browsing'], true) ?></pre>
+                <pre><?php echo htmlspecialchars($contrib['widget_browsing']->getBytes()) ?></pre>
                 </fieldset>
 
                 <fieldset>
                 <legend>widget display</legend>
-                <pre><?php echo print_r($contrib['widget_display'], true) ?></pre>
+                <pre><?php echo htmlspecialchars($contrib['widget_display']->getBytes(), true) ?></pre>
                 </fieldset>
 
                 <fieldset>

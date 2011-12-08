@@ -6,7 +6,7 @@ function add_contribfields()
     var container = $("#prototype > .contrib").clone();
     container.attr('id', id);
 
-    $.map(container.find('input'), function(e, i)
+    $.map(container.find('input,select'), function(e, i)
         {
             e = $(e);
             var input_id = id + '-' + e.attr('name');

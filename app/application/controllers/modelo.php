@@ -23,26 +23,53 @@ class Modelo extends CI_Controller {
 		{
 			$data = $this->input->post();
 
+			echo '<pre>';
+
 			$modelo = array();
 			$modelo['nombre'] = $data['nombre'];
-			$modelo['admin'] = $data['admin'];
-			
-			$modelo['contrib'] = array();
 
+			$modelo['circle'] = array_map(function($id) { return new MongoId($id); }, $data['circle']);
+									
+			$modelo['tipoContrib'] = array();
 
-			foreach($data['contrib'] as $contrib)
+			foreach($data['contrib'] as $key => $contrib)
 			{
 				$c = array();
 				$c['nombre'] = $contrib['nombre'];
-				//$c['template']= $contrib['template'];
+				$c['content'] = $contrib['content'];
 
-				$c['metadata'] = $contrib['metadata'];
-				$c['ref'] = $contrib['ref'];
+				if(isset($contrib['metadata']))
+				{
+					$c['metadata'] = $contrib['metadata'];
+				}
+				else
+				{
+					$c['metadata'] = array();
+				}
 
-				$modelo['contrib'][] = $c;
+				if(isset($contrib['ref']))
+				{
+					$c['ref'] = $contrib['ref'];
+				}
+				else
+				{
+					$c['ref'] = array();
+				}
+								
+				$display_name = $_FILES['contrib']['name'][$key]['widget_display'];
+				$display_file = $_FILES['contrib']['tmp_name'][$key]['widget_display'];
+
+				$c['widget_display'] = $this->grid->storeFile($display_file, array('filename' => $display_name));
+
+				$browsing_name = $_FILES['contrib']['name'][$key]['widget_browsing'];
+				$browsing_file = $_FILES['contrib']['tmp_name'][$key]['widget_browsing'];
+
+				$c['widget_browsing'] = $this->grid->storeFile($browsing_file, array('filename' => $browsing_name));
+
+				$modelo['tipoContrib'][$key] = $c;
 			}
 
-			$this->modelos->insert($modelo);
+			$this->modelos->insert($modelo);	
 			redirect('modelo');	
 			return;
 		}
@@ -71,18 +98,21 @@ class Modelo extends CI_Controller {
 
 	public function view($name = null)
 	{
-		if($name) {
-			$modelo = $this->modelos->findOne( array('nombre' => $name));
+		$modelo = $this->modelos->findOne( array('nombre' => $name));
+
+		if($modelo) {			
 			
-			$data['modelo'] = $modelo;
+			$data['modelo'] = &$modelo;
 
-
-
-			foreach($modelo['tipoContrib'] as $contrib)
+			$tipoContrib = $modelo['tipoContrib'];
+			// LOLPHP: no funciona si usamos foreach($modelo['tipoContrib'] as &$contrib)
+			foreach($tipoContrib as &$contrib)
 			{
-				$contrib['widget_browsing'] = $this->grid->findOne($contrib['widget_browsing']);
-				$contrib['widget_display'] = $this->grid->findOne($contrib['widget_display']);
+				$contrib['widget_browsing'] = $this->grid->get($contrib['widget_browsing']);
+				$contrib['widget_display'] = $this->grid->get($contrib['widget_display']);
 			}
+
+			$modelo['tipoContrib'] = $tipoContrib;
 
 			if($modelo)
 			{

@@ -8,7 +8,7 @@
     <script type="text/javascript" src="<?php echo base_url('script/dynaform.js') ?>"></script>
 
 
-    <form action="<?php echo base_url('modelo/add') ?>" method="post">
+    <form action="<?php echo base_url('modelo/add') ?>" method="post" enctype="multipart/form-data">
     <h1><?php echo $title ?></h1>
     <input type="submit" name="add" value="Crear">
     <p>
@@ -38,10 +38,10 @@
     <div id="contrib">
         
     </div>
+    
     </form>
 
     <div style="display: none" id="prototype">
-
 
         <fieldset class="contrib"><legend>contribución</legend><p>
             <label>nombre<input type="text" name="nombre" required /></label>
@@ -69,32 +69,18 @@
 
 
         <div class="metadata">
-        <label>nombre<input type="text" name="name" required/></label>
-        <label>tipo
-                <select name="tipo" required> 
-                    <option value="string">string</option> 
-                    <option value="text">texto</option> 
-                    <option value="number">número</option> 
-                    <option value="datetime">fecha/hora</option> 
-                    <option value="url">url</option>
-                    <option value="file">archivo</option>
-                </select>
-        </label>
-        <label class="widget"><input type="file" name="widget"></label>
-        </div>
-
-        <div class="metadata_ref">
-        <label>nombre<input type="text" name="name" required/></label>
-        <label>tipo
-                <select name="tipo" required>
-                    <option value="text">texto</option> 
-                    <option value="number">número</option> 
-                    <option value="datetime">fecha/hora</option> 
-                    <option value="url">url</option>
-                    <option value="file">archivo</option>
-                </select>
-        </label>
-        <label><input type="file" name="widget"></label>
+            <label>nombre<input type="text" name="name" required/></label>
+            <label>tipo
+                    <select name="tipo" required> 
+                        <option value="string">string</option> 
+                        <option value="text">texto</option> 
+                        <option value="number">número</option> 
+                        <option value="datetime">fecha/hora</option> 
+                        <option value="url">url</option>
+                        <option value="file">archivo</option>
+                    </select>
+            </label>
+            <label class="widget"><input type="file" name="widget"></label>
         </div>
 
         <fieldset class="ref">
@@ -104,8 +90,6 @@
                 <legend>metadata <a href="#">+</a></legend>
             </fieldset>
         </fieldset>
-
     </div>
-
 </body>
 </html>

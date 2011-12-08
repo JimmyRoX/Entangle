@@ -1,32 +1,29 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Untitled Page</title>
+    <title> Editar modelo </title>
 </head>
 <body>
     <script type="text/javascript" src="<?php echo base_url('script/jquery-1.7.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo base_url('script/dynaform.js') ?>">
+    <script type="text/javascript" src="<?php echo base_url('script/dynaform.js') ?>"></script>
 
-    </script>
-    <form action="<?php echo base_url('modelo') ?>" method="get">
-    <input type="hidden" value="<?php echo $id ?>" >
-    <h1>
-        Agregar Modelo</h1>
-    <input type="submit" title="hai" >
+
+    <form action="<?php echo base_url('modelo/add') ?>" method="post" enctype="multipart/form-data">
+    <h1>Editar modelo</h1>
+    <input type="submit" name="add" value="Crear">
     <p>
         <label>
             nombre
-            <input type="text" name="nombre" >
+            <input type="text" name="nombre" required value="<?php echo $modelo['nombre']?>">
         </label>
     </p>
     <p>
         <label>
             admin
-            <select name="admin[]" multiple>
-            <?php foreach($admin as $name): ?>
-                <option <?php if(in_array($admin, $old_admin)) { echo "selected" } ?> >
-                    <?php echo($name); ?>
-                </option>
+            <select name="circle[]" multiple required>
+            <?php foreach($admin as $circle): ?>
+                <option value="<?php echo $circle['_id']?>" <?php if(in_array($circle['_id'], $modelo['circles'])) { echo 'selected'; } ?> >
+                <?php echo($circle['name']); ?></option>
             <?php endforeach; ?>
             </select>
         </label>
@@ -36,51 +33,131 @@
         Contribuciones <a href="#" id="add_contrib">+</a> </h2>
     
     <script type="text/javascript">
-
-        
-        $('#add_contrib').click(function (ev) {
-            var count = $('#contrib .contrib').length;
-            
-            $('#contrib').append(gen_contribfields(count));
-        });
-
+        $('#add_contrib').click(add_contribfields);
     </script>
+    
     <div id="contrib">
-        <?php $c_id = 0;
-            foreach($old_contrib as $contrib): ?>
-            <fieldset class="contrib"><legend>contribución</legend><p>
-                <label>nombre
-                    <input type="text" name="contrib[<?php echo $c_id ?>][name]" value="<?php echo $contrib["nombre"] ?>" />
-                </label>
-                <label>template
-                    <input type="text" name="contrib[<?php echo $c_id ?>][template]" value="<?php echo $contrib["template"] ?>" />
-                </label> </p>
+        <?php foreach($modelo['tipoContrib'] as $key => $contrib): ?>
+        <?php $id = 'contrib-'.$key; $field = 'contrib['.$key.']' ?>
+        <fieldset class="contrib" id="<?php echo $id ?>" ><legend>contribución</legend><p>
+            <label>nombre<input type="text" name="<?php echo $field.'[nombre]' ?>" required value="<?php echo $contrib['nombre'] ?>"/></label>
+            <label>widget (browsing)<input type="file" name="<?php echo $field.'[widget_browsing]' ?>" required/></label>
+            <label>widget (display)<input type="file" name="<?php echo $field.'[widget_display]' ?>" required/></label>            
+            <div><label>tipo contribucion
+                <?php form_dropdown('content', contrib_types(), $contrib['content']); ?>
+            </label></div>
+            </p>
 
-                <fieldset>
-                <label>metadata <a href="#"></label>
+            <fieldset class="metadata" id="<?php echo $id.'-metadata'; ?>" >
+                <legend>metadata <a href="#">+</a></legend>
+                <?php 
+                    if(isset($contrib['metadata']))
+                    foreach($contrib['metadata'] as $meta_key => $meta): 
+                    $meta_id = $id.'-metadata-'.$meta_key;
+                    $meta_field = $field.'[metadata]['.$meta_key.']';
+                ?>
 
-                <?php $m_id = 0; foreach($contrib['metadata'] as $meta): ?>
-                    <div><label>
-                            <input type="text" name="contrib[<?php echo $c_id ?>][metadata][<?php echo $m_id ?>][name]" />
-                        </label>
-                        <label>tipo
-                            <select name="' + parent_id + '[metadata][' + count + '][name]">
-                                <option value="text">texto</option>
-                                <option value="number">número</option>
-                                <option value="datetime">fecha/hora</option>
-                                <option value="url">url</option>
-                                <option value="file">archivo</option>
-                            </select>
-                        </label>
-                    </div>
-                <?php $m_id++;  endforeach; ?>
+                <div class="metadata" id="<?php echo $meta_id ?>" >
+                    <label>nombre<input type="text" name="<?php echo $meta_field.'[name]' ?>" required value="<?php echo $meta['name'] ?>"/></label>
+                    <label>tipo
+                    <?php  echo form_dropdown($meta_field.'[tipo]', metadata_types(), $meta['tipo']); ?>
+                    </label>
+                    <label class="widget"><input type="file" name="widget"></label>
+                </div>        
+                    
+                <?php endforeach; ?>
+            </fieldset>
+
+            <fieldset class="ref" id="<?php echo $id.'-ref' ?>" >
+                <legend>referencias <a href="#">+</a></legend>
+                <?php
+                    if(isset($contrib['refs']))
+                 foreach($contrib['refs'] as $ref_key => $ref): 
+                    $ref_id = $id.'-ref-'.$ref_key;
+                    $ref_field = $field.'[refs]['.$ref_key.']';
+                ?>
+
+                <fieldset class="ref" id="<?php echo $ref_id ?>">
+                    <label>nombre<input type="text" name="<?php echo $ref_field.'[name]' ?>" required value="<?php echo $ref['name'] ?>"/></label>
+                    <label>tipo destino <input type="text" name="<?php echo $ref_field.'[target]' ?>" required value="<?php echo $ref['target'] ?>"></label>
+                    <fieldset class="metadata" id="<?php echo $ref_id.'-metadata' ?>" >
+                        <legend>metadata <a href="#">+</a></legend>
+                        <?php if(isset($ref['metadata']))
+                            foreach($ref['metadata'] as $metaref_key => $metaref): 
+                                $metaref_id = $ref_id.'-metadata-'.$metaref_key;
+                                $metaref_field = $ref_field.'[metadata]['.$metaref_key.']';
+                            ?>
+
+                            <div class="metadata" id="<?php echo $metaref_id ?>" >
+                                <label>nombre<input type="text" name="<?php echo $metaref_field.'[name]' ?>" required value="<?php echo $meta['name'] ?>"/></label>
+                                <label>tipo
+                                <?php  echo form_dropdown($metaref_field.'[tipo]', metadata_types(), $meta['tipo']); ?>
+                                </label>
+                                <label class="widget"><input type="file" name="widget"></label>
+                            </div>        
+                                
+                        <?php endforeach; ?>
+
+                    </fieldset>
                 </fieldset>
 
+                <div class="ref">
+
+                    <label>tipo
+                    <?php  echo form_dropdown('tipo', metadata_types(), $meta['tipo']); ?>
+                    </label>
+                    <label class="widget"><input type="file" name="widget"></label>
+                </div>        
+                    
+                <?php endforeach; ?>
+
             </fieldset>
-            
-        <?php $c_id++;
-            endforeach; ?>
+        </fieldset>
+
+        <?php endforeach; ?>
+
+        
     </div>
+    
     </form>
+
+    <div style="display: none" id="prototype">
+
+        <fieldset class="contrib"><legend>contribución</legend><p>
+            <label>nombre<input type="text" name="nombre" required /></label>
+            <label>widget (browsing)<input type="file" name="widget_browsing" required/></label>
+            <label>widget (display)<input type="file" name="widget_display" required/></label>
+            <div><label>tipo contribucion
+                <?php form_dropdown('content', contrib_types()); ?>
+            </label></div>
+            </p>
+
+            <fieldset class="metadata">
+                <legend>metadata <a href="#">+</a></legend>
+
+            </fieldset>
+
+            <fieldset class="ref">
+                <legend>referencias <a href="#">+</a></legend>
+            </fieldset>
+        </fieldset>
+
+
+        <div class="metadata">
+            <label>nombre<input type="text" name="name" required/></label>
+            <label>tipo
+                <?php echo form_dropdown('tipo', metadata_types()); ?>
+            </label>
+            <label class="widget"><input type="file" name="widget"></label>
+        </div>
+
+        <fieldset class="ref">
+            <label>nombre <input type="text" name="name" required></label>
+            <label>tipo destino <input type="text" name="target" required></label>
+            <fieldset class="metadata">
+                <legend>metadata <a href="#">+</a></legend>
+            </fieldset>
+        </fieldset>
+    </div>
 </body>
 </html>

@@ -23,7 +23,7 @@ function add_contribfields()
     
 
     add_meta.click(
-        get_addmeta_function(meta_list)
+        get_addmeta_function(meta_list, true)
     );
 
 
@@ -44,7 +44,7 @@ function add_contribfields()
     
 }
 
-function get_addmeta_function(meta_list)
+function get_addmeta_function(meta_list, widget)
 {
     var meta_list_id = meta_list.attr('id');
 
@@ -65,6 +65,10 @@ function get_addmeta_function(meta_list)
 
             meta.find('.delete').click(function(e){ meta.remove() });
 
+            if( !widget )
+            {
+                meta.find('.widget').remove();
+            }
             meta_list.append(meta);
             
             return false;
@@ -98,8 +102,8 @@ function get_addref_function(ref_list)
 
             meta_list.attr('id', meta_list_id);
         
-            add_meta.click( get_addmeta_function(meta_list) );
-
+            add_meta.click( get_addmeta_function(meta_list, false) );
+            
             ref.find('.delete').click(function(e) { ref.remove() });
 
             ref_list.append(ref);

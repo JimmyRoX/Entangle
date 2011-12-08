@@ -125,6 +125,37 @@ class Modelo extends CI_Controller {
 		show_404();
 	}
 
+	public function edit($name = null)
+	{
+		$modelo = $this->modelos->findOne( array('nombre' => $name));
+
+		if($modelo) {			
+			
+			$data['modelo'] = &$modelo;
+			$data['admin'] = $this->db->circles->find();
+
+			// $tipoContrib = $modelo['tipoContrib'];
+			// // LOLPHP: no funciona si usamos foreach($modelo['tipoContrib'] as &$contrib)
+			
+			// foreach($tipoContrib as &$contrib)
+			// {
+			// 	$contrib['widget_browsing'] = $this->grid->get($contrib['widget_browsing']);
+			// 	$contrib['widget_display'] = $this->grid->get($contrib['widget_display']);
+			// }
+
+
+			// $modelo['tipoContrib'] = $tipoContrib;
+
+			if($modelo)
+			{
+				$this->load->view('edit_modelo', $data);
+				return;
+			}
+		}
+
+		show_404();
+	}
+
 	public function delete($name = null)
 	{
 		if($name)

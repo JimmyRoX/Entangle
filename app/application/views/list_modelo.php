@@ -10,11 +10,14 @@
 	<tr>
 		<th>nombre</th>
 		<th></th>
+		<th></th>
 	</tr>
 <?php foreach($modelo as $m): ?>
 	<tr>
 		<td><?php echo anchor('modelo/view/' . $m['nombre'], $m['nombre']); ?></td>
+		<td><?php echo anchor('modelo/edit/'.$m['nombre'], 'editar'); ?></td>
 		<td><?php echo anchor('modelo/delete/' . $m['nombre'], '-'); ?></td>
+		
 	</tr>
 <?php endforeach; ?>
 </table>

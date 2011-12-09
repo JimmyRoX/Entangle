@@ -44,10 +44,17 @@ class Search extends CI_Controller
 			
 		$grid = $this->db->getGridFS();
 		$file = $grid->get(new MongoId($id));
-				
-		$cursor = $this->db->fs->chunks->find(array("files_id" => $id))->sort(array("n" => 1));
-		//$this->load->view('search_result', array('files' => 'asd'));
-		$this->load->view('get_file', array('file' => $file, 'cursor'=>$cursor));
+			
+		/*
+		$this->load->helper('download');
+		$data = $file->getBytes();
+		$name = $file->getFilename();
+		force_download($name, $data);
+		*/
+		
+		$this->load->view('get_file', array('id'=>$id, 'file'=>$file));
+		
+		
 	}
 	
 	function search_home()
@@ -56,8 +63,8 @@ class Search extends CI_Controller
 		
 		$cursor=$this->db->command(array('distinct' => 'contribs', 'key' => 'tipoContrib'));			
 		$data['tipos'] = $cursor;
-		
-		$this->load->view('search_home', $data);
+				
+		$this->load->view('search_home', array('tipos' => $cursor));
 	}
 	
 	function search_result()
@@ -67,6 +74,25 @@ class Search extends CI_Controller
 		$type=$data['tipo'];
 		$this->contribs = $this->db->contribs;
 		
+		//Se obtiene lista de ids de acl del usuario logueado
+		$acl_session = $this->session->userdata('acl'); 
+		$acl_ids = array(); 
+		foreach ($acl_session as $item)
+		{
+			foreach ($item as $acl)
+			$acl_ids[]=$acl;			
+		}
+				
+		//Se filtran los circulos con permiso de vision
+		$acl_view = array();
+		$this->circles = $this->db->circles;
+		foreach ($acl_ids as $acl)
+		{
+			$circle = $this->circles->findOne(array('_id' => new MongoId($acl)));
+			if ($circle['view']==1)
+				$acl_view[]=$acl;
+		}
+		
 		//$contribuciones=$this->contribs->find();
 		$contribuciones=$this->contribs->find(array('metadata.nombre'=> array('$regex' => '.*'.$keyword.'.*', '$options' => 'i'), 'tipoContrib'=> array('$regex' => '.*'.$type.'.*')));	
 		$instancias=array();
@@ -75,12 +101,32 @@ class Search extends CI_Controller
 		foreach($contribuciones as $instancia)
 		{
 			$instance = $this->submodels->findOne(array('_id' => $instancia['submodel']));
-			$instancia['submodel']=$instance['nombre'];
-			array_push($instancias, $instancia);
+			
+			$circles_submodel = $instance['circle'];
+			
+			//Se añade la contribucion, solo si alguno de los circulos asociados a su submodelo
+			//pertenecen a la lista de circulos con visible=1 que tiene asociada el usuario
+			$salir=false;
+			foreach($circles_submodel as $circle_submodel)
+			{
+				foreach($circle_submodel as $circle_item)
+				{
+					if (in_array($circle_item , $acl_view))
+					{
+						$instancia['submodel']=$instance['nombre'];
+						$instancias[]=$instancia;
+						//$instancia['circles']=$circles_submodel;
+						$salir=true;
+						break;
+					}
+				}
+				if($salir)
+					break;				
+			}			
 		}	
 		
 		
-		$this->load->view('search_result', array('submodelos'=>$instancias, 'keyword' => $keyword));
+		$this->load->view('search_result', array('contribuciones'=>$instancias, 'keyword' => $keyword));
 	}
 	
 }

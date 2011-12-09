@@ -7,6 +7,10 @@
 	</head>
 	<body>	
 	<div>
+	Hola <?php echo $this->session->userdata('username'); ?>
+	
+	</div>
+	<div>
 	<?php echo form_open('search/search_result') ?>
 		<fieldset>
 		<legend>B&uacute;squeda:</legend>

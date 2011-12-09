@@ -9,16 +9,17 @@
 	<body>
 	<h2>Resultados de la B&uacute;squeda para <em>"<?php echo $keyword; ?>"</em>:</h2>
 		<?php 
-				 
-			 foreach($submodelos as $contribucion)
+										 
+			 foreach($contribuciones as $contribucion)
 			 {
 				echo '<div>';
 				//nombre de la contribucion
 				echo '<p><em>'.$contribucion['submodel'].' -- <strong>'.$contribucion['metadata']['nombre'].'</strong></em><br/>';
 				
+				
 				//Si es algun file hacemos un enlace
 				if ($contribucion['tipoContrib']=="paper" || $contribucion['tipoContrib']=="clase")
-					echo $contribucion['tipoContrib'].': <a href=get_file/?id='.$contribucion['_id'].' target=_blank>'.$contribucion['content'].'</a><br/>';
+					echo $contribucion['tipoContrib'].': <a href=get_file/?id='.$contribucion['content'].' target=_blank>'.'archivo adjunto'.'</a><br/>';
 				else if ($contribucion['tipoContrib']=="video" || $contribucion['tipoContrib']=="audio")
 					echo $contribucion['tipoContrib'].': <a href='.$contribucion['content'].' target=_blank>'.$contribucion['content'].'</a><br/>';
 				else			

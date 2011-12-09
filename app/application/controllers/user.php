@@ -15,6 +15,9 @@
 			self::signup();
 		}
 		
+		/**
+		 * Metodo que crea un usuario. Validación y redirección según el caso.
+		 */
 		function signup(){
 			
 			//reglas de validación.
@@ -33,7 +36,9 @@
 			$this->load->view('user_create_view_success');
 		}
 		
-		//Registramos al usuario
+		/**
+		 * Crea el usuario y lo guarda en la BD.
+		 */
 		function create(){
 			//getting default circle
 			$def_circle = $this->circle_model->get_Circle("cursos");
@@ -51,7 +56,9 @@
 			$this->user_model->add_User($document);
 		}
 		
-		//Listar usuarios
+		/**
+		 * Listado usuarios. Falta enlazar con la vista asociada.
+		 */
 		function view(){
 			$user_documents = $this->user_model->get_AllUsers();
 			$data = array('user_documents' => array());
@@ -63,10 +70,14 @@
 										'email' => $user_document['email'],
 										);
 			}
-			$this->load->view('user_view', $data);
+			//$this->load->view('user_view', $data);
 		}
 		
-		//Test de unicidad de usuarios
+		/**
+		 * Chequeo que el nombre de usuario sea único.
+		 * @param  $string : nombre de usuario que se quiere usar.
+		 * @return boolean : TRUE si puede, FALSE en caso contrario.
+		 */
 		function username_check($string){
 			
 			if ($string == 'test'){
@@ -83,6 +94,7 @@
 			return TRUE;
 		}
 		
+		//not yet
 		function update(){
 		}
 			

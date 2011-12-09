@@ -12,7 +12,10 @@ class Login extends CI_Controller {
 	public function index() {
 		$this->load->view('user_login_view');
 	}
-
+	
+	/**
+	 * Método que logea un usuario.
+	 */
 	public function submit() {
 
 		if ($this->_submit_validate() == FALSE) {
@@ -24,6 +27,9 @@ class Login extends CI_Controller {
 		$this->load->view('user_login_success', $data);
 	}
 
+	/**
+	 * Validación de formulario de logeo.
+	 */
 	private function _submit_validate() {
 		
 		$this->form_validation->set_rules('name', 'Username', 'trim|required|callback_authenticate');
@@ -33,6 +39,9 @@ class Login extends CI_Controller {
 		return $this->form_validation->run();	
 	}
 	
+	/**
+	 * Autenticación del usuario.
+	 */
 	public function authenticate() {
 	
 		// get user document by name
@@ -59,6 +68,9 @@ class Login extends CI_Controller {
 		return FALSE;
 	}
 	
+	/**
+	 * Desconexión.
+	 */
 	public function logout(){
 		$this->session->sess_destroy();
 		redirect('/');

@@ -7,7 +7,7 @@
 <h3>Your circle was successfully created!</h3>
 
 <p>
-<?php echo anchor('circle/index', 'Try it again!'); ?>
+<?php echo anchor('search/index', 'Go to home'); ?>
 </p>
 </body>
 </html>

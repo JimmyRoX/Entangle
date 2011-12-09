@@ -64,7 +64,8 @@ class Search extends CI_Controller
 		$cursor=$this->db->command(array('distinct' => 'contribs', 'key' => 'tipoContrib'));			
 		$data['tipos'] = $cursor;
 				
-		$this->load->view('search_home', array('tipos' => $cursor));
+		//$this->load->view('search_home', array('tipos' => $cursor));
+		$this->load->view('home', array('tipos' => $cursor));
 	}
 	
 	function search_result()

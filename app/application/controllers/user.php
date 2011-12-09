@@ -8,16 +8,17 @@
 			//cargar librería, helper y modelo.
 			$this->load->library(array('table', 'form_validation'));
 			$this->load->helper('form', 'url');
-			$this->load->model('user_model');
+			$this->load->model(array('user_model', 'circle_model'));
 		}
 		
 		function index(){
 			self::signup();
 		}
 		
+		/**
+		 * Metodo que crea un usuario. Validación y redirección según el caso.
+		 */
 		function signup(){
-			//$this->load->helper(array('form', 'url'));
-			//$this->load->library('form_validation');
 			
 			//reglas de validación.
 			$this->form_validation->set_rules('name', 'Name', 'callback_username_check');
@@ -33,23 +34,31 @@
 			self::create();
 			
 			$this->load->view('user_create_view_success');
-			//$this->load->view('user_create_view');
 		}
 		
-		//Registramos al usuario
+		/**
+		 * Crea el usuario y lo guarda en la BD.
+		 */
 		function create(){
+			//getting default circle
+			$def_circle = $this->circle_model->get_Circle("cursos");
+			$id = new MongoID($def_circle['_id']);
+			
 			$document = array(
 				'name' => $this->input->post('name'),
 				'password' => $this->input->post('password'),
 				'email' => $this->input->post('email'),
 				'acl' => array(
-				//colocar default circle?
+				//asignamos el circulo cursos por default
+				0 => array('circle' => $id)
 				)
 			);		
 			$this->user_model->add_User($document);
 		}
 		
-		//Listar usuarios
+		/**
+		 * Listado usuarios. Falta enlazar con la vista asociada.
+		 */
 		function view(){
 			$user_documents = $this->user_model->get_AllUsers();
 			$data = array('user_documents' => array());
@@ -61,10 +70,14 @@
 										'email' => $user_document['email'],
 										);
 			}
-			$this->load->view('user_view', $data);
+			//$this->load->view('user_view', $data);
 		}
 		
-		//Test de unicidad de usuarios
+		/**
+		 * Chequeo que el nombre de usuario sea único.
+		 * @param  $string : nombre de usuario que se quiere usar.
+		 * @return boolean : TRUE si puede, FALSE en caso contrario.
+		 */
 		function username_check($string){
 			
 			if ($string == 'test'){
@@ -81,7 +94,8 @@
 			return TRUE;
 		}
 		
-		function update(){	
+		//not yet
+		function update(){
 		}
 			
 	}

@@ -153,14 +153,14 @@ if(isset($widget_file)) {
 		</script>
 		<div id="mouseDialog" style="display:none">
 		<?php
-		echo eval(' ?>'.widget_to_php($str).'<?php ');
+		echo widget_to_php($str);
 		?>
 		</div>
 		<a href="" class="mouseMe">MouseOver me!</a>
 		<?php
 	}
 	else {
-	echo eval(' ?>'.widget_to_php($str).'<?php ');
+	echo widget_to_php($str);
 	}
 }
 

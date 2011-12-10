@@ -6,11 +6,23 @@ $("#submodel").change(function(){
 	 function(data){
 	   $("#contribs").html("<tr><th>nombre</th><th></th></tr>");
 	   jQuery.each(data, function(i, val){
-		$("#contribs").append('<tr><td><a href="../../contribution/view/'+val.id+'">'+val.nombre+'</a></td><td><a href="../../contribution/delete/'+val.id+'"><-Remove></a></td><td><a href="../../contribution/add_reference/'+val.id+'"><+ Ref></a></td></tr>');
+		$("#contribs").append('<tr><td><a href="../../contribution/view/'+val.id+'">'+
+		val.nombre+'</a></td><td><a href="../../contribution/delete/'+val.id+
+		'"><-Remove></a></td><td><input type="button" class="addReferenceButton" value="Add Ref"/></td></tr>');
+		
 	  	
 	   });
+	   $("input.addReferenceButton").click(addReferenceHandler);
 	 }, "json");
 	});
+
+
+function addReferenceHandler()
+{
+	var container = $("#prototype").clone();
+}
+
+
 
 });
 

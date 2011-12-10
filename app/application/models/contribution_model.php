@@ -18,7 +18,7 @@ class Contribution_Model extends CI_Model{
 	}
 	
 	function add_Contribution($contrib){
-		$this->contribs->insert($contrib);
+		return $this->contribs->insert($contrib);
 	}
 	
 	function list_Contributions(){
@@ -27,11 +27,18 @@ class Contribution_Model extends CI_Model{
 	}
 	
 	function update_Contribution($data){
-		$this->contribs->update(array("name" => $data['name']), $data);
+		return $this->contribs->update(array("name" => $data['name']), $data);
 	}
 	
 	function delete_Contribution($id){
 		$this->contribs->remove(array('_id' => new MongoId($id)));
+	}
+
+	function add_reference($c_id, $ref)
+	{
+		$contrib_id = new MongoId($c_id);
+		$this->contribs->update(array('_id'=>$contrib_id), array('$push'=>array('refs'=>$ref)) );
+		
 	}
 
 }

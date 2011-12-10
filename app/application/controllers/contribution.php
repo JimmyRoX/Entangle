@@ -86,8 +86,46 @@ class Contribution extends CI_Controller {
 	{
 		if($this->input->post('add'))
 		{
-			//TODO: guardar la referencia
+			$input = $this->input->post();
+			$reference = $input['reference'];
+			
+			unset($reference['target']);
+			unset($reference['tipoRef']);	
+			if($input['reference']['target']=="-1")
+			{
+				$contrib = $input['contribution'];
+
+				$contrib['submodel'] = new MongoId($contrib['submodel']);
+			
+				if($input['is_file']=="true")
+				{
+					$name = $_FILES['content']['name'];
+					$fileId = $this->grid->storeUpload('content',$name);
+					$contrib['content'] = $fileId;
+				}
+				else
+				$contrib['content'] = $input['content'];
+				
+				$this->contribution_model->add_Contribution($contrib);
+				
+				
+				$reference[$input['reference']['tipoRef']] = $contrib['_id'];
+			}
+			else
+			{
+				$reference[$input['reference']['tipoRef']] = new MongoId($input['reference']['target']);
+			}
+			$this->contribution_model->add_Reference($input['contrib_id'], $reference);
+			
+
+			redirect('contribution');	
+			return;
 		}
+		
+	}
+	
+	public function show()
+	{
 		$data = array();
 		
 		//Verificamos si esta logueado
@@ -97,41 +135,6 @@ class Contribution extends CI_Controller {
 			redirect('login');
 			return;
 		}
-
-		//Obtenemos la lista de tipos de referencia según la contribución dada
-		$data['contrib'] = $id_contrib;
-		
-		$contribDoc = $this->contribution_model->get_Contribution($id_contrib);
-
-		$submodelDoc = $this->submodel_model->get_Submodel($contribDoc['submodel']);
-
-		$modelDoc = $this->db->models->findOne(array('_id' => new MongoId($submodelDoc['model'])));
-		
-
-		foreach($modelDoc['tipoContrib'] as $contrib)
-		{
-			
-			if($contrib['nombre'] == $contribDoc['tipoContrib'] && array_key_exists("refs", $contrib))
-			{
-				foreach($contrib['refs'] as $ref)
-				{
-						$reference = array();
-						$reference['name'] = $ref['name'];
-						$reference['target'] = $ref['target'];
-						$data['refsTypes'][]= $reference;					
-				}
-			}
-		}
-	
-
-		$this->load->view('add_reference.php', $data);
-	}
-	
-	public function show()
-	{
-		$data = array();
-		
-		$user = $this->user_model->get_User($this->session->userdata('username'));
 
 		$submodelsDocs = array();
 		foreach($user['acl'] as $circleId)
@@ -188,6 +191,7 @@ class Contribution extends CI_Controller {
 	{
 		//Obtenemos el tipo de referencia
 		$tipoRef = $this->input->get('tipoRef');
+		$target = $this->input->get('target');
 
 		if($id) {
 			//Navegamos hasta la colección "models" para obtener los campos de metadata de la referencia
@@ -209,15 +213,12 @@ class Contribution extends CI_Controller {
 						//Buscamos la referencia por el nombre
 						if($ref['name'] == $tipoRef)
 						{
-							
-							$reference['target'] = $ref['target'];
-
 							//Buscamos las contribuciones existentes que pueden servir de target
 							$contribs = $this->db->contribs->find(array('tipoContrib' => $ref['target']));
 							while($contribs->hasNext())
 							{
 								$c = $contribs->getNext();
-								$reference['contribs'][] = array("name"=>$c['metadata']['nombre'],"id"=>$c['_id']);	
+								$reference['contribs'][] = array("name"=>$c['metadata']['nombre'],"id"=>$c['_id']."");	
 							}
 						
 							if(array_key_exists("metadata", $ref))
@@ -229,11 +230,49 @@ class Contribution extends CI_Controller {
 						}
 					}
 				}
+				
+				
+				if($contrib['nombre'] == $target)
+				{
+					$reference['target'] = $contrib;
+					break;
+				}
 			}
 
 			echo json_encode($reference);
 		}
 	}
+	
+	//Listado de referencias de una contribución dada
+	public function references_json()
+	{
+		$contribution_id = new MongoId($this->input->get('contribution_id'));
+		if($contribution_id) {
+			$contribDoc = $this->contribution_model->get_Contribution($contribution_id);
+
+			$submodelDoc = $this->submodel_model->get_Submodel($contribDoc['submodel']);
+
+			$modelDoc = $this->db->models->findOne(array('_id' => new MongoId($submodelDoc['model'])));
+		
+			$data = array();
+			foreach($modelDoc['tipoContrib'] as $contrib)
+			{
+			
+				if($contrib['nombre'] == $contribDoc['tipoContrib'] && array_key_exists("refs", $contrib))
+				{
+					foreach($contrib['refs'] as $ref)
+					{
+							$reference = array();
+							$reference['name'] = $ref['name'];                               
+							$reference['target'] = $ref['target'];
+							$data[]= $reference;
+					}
+				}
+			}
+			echo json_encode($data);
+		}
+	} 
+
 
 	//Listado de contribuciones en un submodelo dado
 	public function contributions_json()

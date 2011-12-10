@@ -58,6 +58,7 @@ class Modelo extends CI_Controller {
 
 			if($display_name) {			
 
+
 				$c['widget_display'] = $this->grid->storeFile($display_file, array('filename' => $display_name));
 				if($original) {
 					$this->grid->remove(array('_id' =>  $original['tipoContrib'][$key]['widget_display']));
@@ -71,10 +72,11 @@ class Modelo extends CI_Controller {
 			$browsing_name = $_FILES['contrib']['name'][$key]['widget_browsing'];
 			$browsing_file = $_FILES['contrib']['tmp_name'][$key]['widget_browsing'];
 
+
 			if($browsing_name) {
-				$c['widget_browsing'] = $this->grid->storeFile($display_file, array('filename' => $display_name));
+				$c['widget_browsing'] = $this->grid->storeFile($browsing_file, array('filename' => $browsing_name));
 				if($original) {
-					$this->grid->remove(array('_id' =>  $original['tipoContrib'][$key]['widget_browsing']));
+				 	$this->grid->remove(array('_id' =>  $original['tipoContrib'][$key]['widget_browsing']));
 				}
 			}
 			else if($original)

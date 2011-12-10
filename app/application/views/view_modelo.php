@@ -8,7 +8,7 @@
     <h1>Modelo</h1>
     
     <p> nombre: <?php echo $modelo['nombre'] ?></p>
-    <!-- <p> admin: <?php echo implode(', ', $modelo['admin']); ?></p> -->
+    <p> admin: <?php echo implode(', ', $admin); ?></p>
     
     <hr>
     <h2>Contribuciones</h2>

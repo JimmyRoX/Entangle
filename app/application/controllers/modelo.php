@@ -129,6 +129,10 @@ class Modelo extends CI_Controller {
 	{
 		$modelo = $this->modelos->findOne( array('nombre' => $name));
 
+		foreach($this->db->circles->find(array('_id' => array('$in' => $modelo['circles']))) as $admin) {
+			$data['admin'][] = $admin['name'];
+		}
+
 		if($modelo) {			
 			
 			$data['modelo'] = &$modelo;

@@ -8,13 +8,15 @@
     <script type="text/javascript" src="<?php echo base_url('script/dynaform.js') ?>"></script>
 
 
-    <form action="<?php echo base_url('modelo/add') ?>" method="post" enctype="multipart/form-data">
+    <form action="<?php echo base_url('modelo/update') ?>" method="post" enctype="multipart/form-data">
     <h1>Editar modelo</h1>
-    <input type="submit" name="add" value="Crear">
+    <input type="submit" name="edit" value="Editar">
+    <input type="hidden" name="_id" value="<?php echo $modelo['_id']?>">
     <p>
         <label>
-            nombre
-            <input type="text" name="nombre" required value="<?php echo $modelo['nombre']?>">
+            nombre: <?php echo $modelo['nombre'] ?>
+            <input type="hidden" name="nombre" required value="<?php echo $modelo['nombre']?>">
+
         </label>
     </p>
     <p>
@@ -34,6 +36,11 @@
     
     <script type="text/javascript">
         $('#add_contrib').click(add_contribfields);
+
+        $(document).ready(function() {
+            set_additems();
+        }
+        );
     </script>
     
     <div id="contrib">
@@ -41,15 +48,28 @@
         <?php $id = 'contrib-'.$key; $field = 'contrib['.$key.']' ?>
         <fieldset class="contrib" id="<?php echo $id ?>" ><legend>contribución</legend><p>
             <label>nombre<input type="text" name="<?php echo $field.'[nombre]' ?>" required value="<?php echo $contrib['nombre'] ?>"/></label>
-            <label>widget (browsing)<input type="file" name="<?php echo $field.'[widget_browsing]' ?>" required/></label>
-            <label>widget (display)<input type="file" name="<?php echo $field.'[widget_display]' ?>" required/></label>            
+
             <div><label>tipo contribucion
-                <?php form_dropdown('content', contrib_types(), $contrib['content']); ?>
+                <?php echo form_dropdown($field.'[content]', contrib_types(), $contrib['content']); ?>
             </label></div>
+
+            <fieldset>
+                <legend><label>widget (browsing) &emsp;
+                    <input type="file" name="<?php echo $field.'[widget_browsing]' ?>"/>
+                </label></legend>
+            <pre class="."><?php echo htmlspecialchars($contrib['widget_browsing']->getBytes()) ?></pre>
+                </fieldset>
+
+            <fieldset>
+                <legend><label>widget (display) &emsp;
+                    <input type="file" name="<?php echo $field.'[widget_display]' ?>"/>
+                </label></legend>
+                <pre><?php echo htmlspecialchars($contrib['widget_display']->getBytes(), true) ?></pre>
+                </fieldset>
             </p>
 
-            <fieldset class="metadata" id="<?php echo $id.'-metadata'; ?>" >
-                <legend>metadata <a href="#">+</a></legend>
+            <fieldset class="metalist" id="<?php echo $id.'-metadata'; ?>" >
+                <legend>metadata <a class="add_meta" href="#">+</a></legend>
                 <?php 
                     if(isset($contrib['metadata']))
                     foreach($contrib['metadata'] as $meta_key => $meta): 
@@ -69,7 +89,7 @@
             </fieldset>
 
             <fieldset class="ref" id="<?php echo $id.'-ref' ?>" >
-                <legend>referencias <a href="#">+</a></legend>
+                <legend>referencias <a class="add_ref" href="#">+</a></legend>
                 <?php
                     if(isset($contrib['refs']))
                  foreach($contrib['refs'] as $ref_key => $ref): 
@@ -77,11 +97,11 @@
                     $ref_field = $field.'[refs]['.$ref_key.']';
                 ?>
 
-                <fieldset class="ref" id="<?php echo $ref_id ?>">
+                <fieldset class="reflist" id="<?php echo $ref_id ?>">
                     <label>nombre<input type="text" name="<?php echo $ref_field.'[name]' ?>" required value="<?php echo $ref['name'] ?>"/></label>
                     <label>tipo destino <input type="text" name="<?php echo $ref_field.'[target]' ?>" required value="<?php echo $ref['target'] ?>"></label>
-                    <fieldset class="metadata" id="<?php echo $ref_id.'-metadata' ?>" >
-                        <legend>metadata <a href="#">+</a></legend>
+                    <fieldset class="metareflist" id="<?php echo $ref_id.'-metadata' ?>" >
+                        <legend>metadata <a class="add_metaref" href="#">+</a></legend>
                         <?php if(isset($ref['metadata']))
                             foreach($ref['metadata'] as $metaref_key => $metaref): 
                                 $metaref_id = $ref_id.'-metadata-'.$metaref_key;
@@ -132,13 +152,13 @@
             </label></div>
             </p>
 
-            <fieldset class="metadata">
-                <legend>metadata <a href="#">+</a></legend>
+            <fieldset class="metalist">
+                <legend>metadata <a class="add_meta" href="#">+</a></legend>
 
             </fieldset>
 
-            <fieldset class="ref">
-                <legend>referencias <a href="#">+</a></legend>
+            <fieldset class="reflist">
+                <legend>referencias <a class="add_ref" href="#">+</a></legend>
             </fieldset>
         </fieldset>
 
@@ -154,8 +174,8 @@
         <fieldset class="ref">
             <label>nombre <input type="text" name="name" required></label>
             <label>tipo destino <input type="text" name="target" required></label>
-            <fieldset class="metadata">
-                <legend>metadata <a href="#">+</a></legend>
+            <fieldset class="metareflist">
+                <legend>metadata <a class="add_metaref" href="#">+</a></legend>
             </fieldset>
         </fieldset>
     </div>

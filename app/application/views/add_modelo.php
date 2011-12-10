@@ -57,13 +57,13 @@
             </label></div>
             </p>
 
-            <fieldset class="metadata">
-                <legend>metadata <a href="#">+</a></legend>
+            <fieldset class="metalist">
+                <legend>metadata <a class="add_meta" href="#">+</a></legend>
 
             </fieldset>
 
-            <fieldset class="ref">
-                <legend>referencias <a href="#">+</a></legend>
+            <fieldset class="reflist">
+                <legend>referencias <a class="add_ref" href="#">+</a></legend>
             </fieldset>
         </fieldset>
 
@@ -86,8 +86,8 @@
         <fieldset class="ref">
             <label>nombre <input type="text" name="name" required></label>
             <label>tipo destino <input type="text" name="tipo_destino" required></label>
-            <fieldset class="metadata">
-                <legend>metadata <a href="#">+</a></legend>
+            <fieldset class="metareflist">
+                <legend>metadata <a class="add_metaref" href="#">+</a></legend>
             </fieldset>
         </fieldset>
     </div>

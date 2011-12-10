@@ -1,5 +1,27 @@
 re_field_id = RegExp('-(\\w+)|(\\w+)$', 'g');
 
+function set_additems()
+{
+    $('#contrib .metalist').each( function(ix, e){
+        var meta_list = $(e);
+        console.log(meta_list);
+        meta_list.find('.add_meta').click(get_addmeta_function(meta_list, true));
+    }
+    );
+
+    $('#contrib .reflist').each(function(ix, e){
+        var ref_list = $(e);
+        ref_list.find('.add_ref').click(get_addref_function(ref_list));
+    }
+    );
+
+    $('#contrib .metareflist').each(function(ix, e){
+        var metaref_list = $(e);
+        metaref_list.find('.add_metaref').click(get_addmeta_function(metaref_list, false));
+    }
+    );
+}
+
 function add_contribfields()
 {
     var id = 'contrib-' + $("#contrib .contrib").length;
@@ -15,9 +37,9 @@ function add_contribfields()
         }
     );
 
-    var meta_list = container.children('fieldset.metadata');
+    var meta_list = container.children('.metalist');
     var meta_list_id = id + '-metadata';
-    var add_meta = meta_list.find('legend a');
+    var add_meta = meta_list.find('legend a.add_meta');
 
     meta_list.attr('id',  meta_list_id);
     
@@ -27,9 +49,9 @@ function add_contribfields()
     );
 
 
-    var ref_list = container.children('fieldset.ref');
-    var ref_list_id = id + '-ref';
-    var add_ref = ref_list.find('legend a');
+    var ref_list = container.children('.reflist');
+    var ref_list_id = id + '-refs';
+    var add_ref = ref_list.find('legend a.add_ref');
 
     ref_list.attr('id',  ref_list_id);
     
@@ -96,9 +118,9 @@ function get_addref_function(ref_list)
             });
 
 
-            var meta_list = ref.children('fieldset.metadata');
+            var meta_list = ref.children('.metareflist');
             var meta_list_id = ref_id + '-metadata';
-            var add_meta = meta_list.find('legend a');
+            var add_meta = meta_list.find('legend a.add_metaref');
 
             meta_list.attr('id', meta_list_id);
         

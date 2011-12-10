@@ -17,61 +17,88 @@ class Modelo extends CI_Controller {
 		$this->show();
 	}
 
+	public function __validateModelo($data, $original = null)
+	{
+		$modelo = array();
+		$modelo['nombre'] = $data['nombre'];
+
+		$modelo['circles'] = array_map(function($id) { return new MongoId($id); }, $data['circle']);
+								
+		$modelo['tipoContrib'] = array();
+
+		
+		foreach($data['contrib'] as $key => $contrib)
+		{
+			$c = array();
+			$c['nombre'] = $contrib['nombre'];
+			$c['content'] = $contrib['content'];
+
+			if(isset($contrib['metadata']))
+			{
+				$c['metadata'] = $contrib['metadata'];
+			}
+			else
+			{
+				$c['metadata'] = array();
+			}
+
+			if(isset($contrib['refs']))
+			{
+				$c['refs'] = $contrib['refs'];
+			}
+			else
+			{
+				$c['refs'] = array();
+			}
+
+
+						
+			$display_name = $_FILES['contrib']['name'][$key]['widget_display'];
+			$display_file = $_FILES['contrib']['tmp_name'][$key]['widget_display'];
+
+			if($display_name) {			
+
+				$c['widget_display'] = $this->grid->storeFile($display_file, array('filename' => $display_name));
+				if($original) {
+					$this->grid->remove(array('_id' =>  $original['tipoContrib'][$key]['widget_display']));
+				}
+			}
+			else if($original)
+			{
+				$c['widget_display'] = $original['tipoContrib'][$key]['widget_display'];
+			}
+
+			$browsing_name = $_FILES['contrib']['name'][$key]['widget_browsing'];
+			$browsing_file = $_FILES['contrib']['tmp_name'][$key]['widget_browsing'];
+
+			if($browsing_name) {
+				$c['widget_browsing'] = $this->grid->storeFile($display_file, array('filename' => $display_name));
+				if($original) {
+					$this->grid->remove(array('_id' =>  $original['tipoContrib'][$key]['widget_browsing']));
+				}
+			}
+			else if($original)
+			{
+				$c['widget_browsing'] = $original['tipoContrib'][$key]['widget_browsing'];
+			}
+
+			$modelo['tipoContrib'][$key] = $c;
+		}
+
+		return $modelo;
+
+	}
+
 	public function add()
 	{
 		if($this->input->post('add'))
 		{
 			$data = $this->input->post();
 
-			echo '<pre>';
+			$modelo = __validateModelo($data);
 
-			$modelo = array();
-			$modelo['nombre'] = $data['nombre'];
-
-			$modelo['circle'] = array_map(function($id) { return new MongoId($id); }, $data['circle']);
-									
-			$modelo['tipoContrib'] = array();
-
-			foreach($data['contrib'] as $key => $contrib)
-			{
-				$c = array();
-				$c['nombre'] = $contrib['nombre'];
-				$c['content'] = $contrib['content'];
-
-				if(isset($contrib['metadata']))
-				{
-					$c['metadata'] = $contrib['metadata'];
-				}
-				else
-				{
-					$c['metadata'] = array();
-				}
-
-				if(isset($contrib['ref']))
-				{
-					$c['ref'] = $contrib['ref'];
-				}
-				else
-				{
-					$c['ref'] = array();
-				}
-								
-				$display_name = $_FILES['contrib']['name'][$key]['widget_display'];
-				$display_file = $_FILES['contrib']['tmp_name'][$key]['widget_display'];
-
-				$c['widget_display'] = $this->grid->storeFile($display_file, array('filename' => $display_name));
-
-				$browsing_name = $_FILES['contrib']['name'][$key]['widget_browsing'];
-				$browsing_file = $_FILES['contrib']['tmp_name'][$key]['widget_browsing'];
-
-				$c['widget_browsing'] = $this->grid->storeFile($browsing_file, array('filename' => $browsing_name));
-
-				$modelo['tipoContrib'][$key] = $c;
-			}
-
-			$this->modelos->insert($modelo);	
-			redirect('modelo');	
-			return;
+			$this->modelos->insert($modelo);
+			redirect('modelo');
 		}
 
 		$data = array();
@@ -125,6 +152,29 @@ class Modelo extends CI_Controller {
 		show_404();
 	}
 
+	public function update()
+	{
+		
+		if($this->input->post('edit'))
+		{
+			$data = $this->input->post();
+			$id = new MongoId($data['_id']);
+
+			$original = $this->modelos->findOne( array('_id' => $id));
+
+			if(!$original)
+			{
+				exit('Ooops, modelo no existe!');
+			}
+
+			$modelo = $this->__validateModelo($data, $original);
+
+			$this->modelos->update(array('_id' => $id), $modelo);
+		}
+
+		redirect('modelo');
+	}
+
 	public function edit($name = null)
 	{
 		$modelo = $this->modelos->findOne( array('nombre' => $name));
@@ -134,17 +184,17 @@ class Modelo extends CI_Controller {
 			$data['modelo'] = &$modelo;
 			$data['admin'] = $this->db->circles->find();
 
-			// $tipoContrib = $modelo['tipoContrib'];
-			// // LOLPHP: no funciona si usamos foreach($modelo['tipoContrib'] as &$contrib)
+			$tipoContrib = $modelo['tipoContrib'];
+			// LOLPHP: no funciona si usamos foreach($modelo['tipoContrib'] as &$contrib)
 			
-			// foreach($tipoContrib as &$contrib)
-			// {
-			// 	$contrib['widget_browsing'] = $this->grid->get($contrib['widget_browsing']);
-			// 	$contrib['widget_display'] = $this->grid->get($contrib['widget_display']);
-			// }
+			foreach($tipoContrib as &$contrib)
+			{
+			 	$contrib['widget_browsing'] = $this->grid->get($contrib['widget_browsing']);
+			 	$contrib['widget_display'] = $this->grid->get($contrib['widget_display']);
+			}
 
 
-			// $modelo['tipoContrib'] = $tipoContrib;
+			$modelo['tipoContrib'] = $tipoContrib;
 
 			if($modelo)
 			{

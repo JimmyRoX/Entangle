@@ -97,7 +97,7 @@ class Modelo extends CI_Controller {
 		{
 			$data = $this->input->post();
 
-			$modelo = __validateModelo($data);
+			$modelo = $this->__validateModelo($data);
 
 			$this->modelos->insert($modelo);
 			redirect('modelo');
@@ -129,11 +129,12 @@ class Modelo extends CI_Controller {
 	{
 		$modelo = $this->modelos->findOne( array('nombre' => $name));
 
-		foreach($this->db->circles->find(array('_id' => array('$in' => $modelo['circles']))) as $admin) {
-			$data['admin'][] = $admin['name'];
-		}
-
 		if($modelo) {			
+
+			
+			foreach($this->db->circles->find(array('_id' => array('$in' => $modelo['circles']))) as $admin) {
+				$data['admin'][] = $admin['name'];
+			}
 			
 			$data['modelo'] = &$modelo;
 

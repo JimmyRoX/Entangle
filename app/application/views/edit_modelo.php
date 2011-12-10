@@ -2,6 +2,7 @@
 <html>
 <head>
     <title> Editar modelo </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
     <script type="text/javascript" src="<?php echo base_url('script/jquery-1.7.min.js') ?>"></script>

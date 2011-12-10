@@ -102,6 +102,18 @@ Released   : 20100328
 		<div id="sidebar">
 			<ul>
 				<li>
+					<h2>Bienvenido <?php echo $this->session->userdata('username'); ?></h2>
+					<p>
+					<?php if ($this->session->userdata('username')==null)
+						  { ?>
+							<a href="login/index">Iniciar Sesi&oacute;n</a>
+					<?php }
+					  else{ ?>
+							<a href="login/logout">Cerrar Sesi&oacute;n</a>
+					<?php } ?>
+					</p>
+				</li>
+				<li>
 					<h2>Acerca</h2>
 					<p>Entangle se basa en los usuarios para poder compartir información acerca de ramos de manera transpartente</p>
 				</li>

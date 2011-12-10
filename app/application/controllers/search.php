@@ -20,6 +20,9 @@ class Search extends CI_Controller
 		$data=$this->input->get('id');		
 		$this->contribs = $this->db->contribs;
 		
+		
+		$cursor=$this->db->command(array('distinct' => 'contribs', 'key' => 'tipoContrib'));			
+				
 		//$contribuciones=$this->contribs->find();
 		$contribuciones=$this->contribs->find(array('_id'=> new MongoId($data)));		
 		$instancias=array();
@@ -35,7 +38,7 @@ class Search extends CI_Controller
 		}	
 		
 		
-		$this->load->view('search_result', array('submodelos'=>$instancias, 'keyword' => $tipo));
+		$this->load->view('search_result', array('contribuciones'=>$instancias, 'keyword' => $tipo, 'tipos' => $cursor));
 	}
 	
 	function get_file()
@@ -75,9 +78,13 @@ class Search extends CI_Controller
 		$type=$data['tipo'];
 		$this->contribs = $this->db->contribs;
 		
+		
+		$cursor=$this->db->command(array('distinct' => 'contribs', 'key' => 'tipoContrib'));			
+				
 		//Se obtiene lista de ids de acl del usuario logueado
 		$acl_session = $this->session->userdata('acl'); 
 		$acl_ids = array(); 
+		if($acl_session!=null)
 		foreach ($acl_session as $item)
 		{
 			foreach ($item as $acl)
@@ -127,7 +134,7 @@ class Search extends CI_Controller
 		}	
 		
 		
-		$this->load->view('search_result', array('contribuciones'=>$instancias, 'keyword' => $keyword));
+		$this->load->view('search_result', array('contribuciones'=>$instancias, 'keyword' => $keyword, 'tipos' => $cursor));
 	}
 	
 }

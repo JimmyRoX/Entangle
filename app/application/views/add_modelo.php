@@ -86,7 +86,7 @@
 
         <fieldset class="ref">
             <label>nombre <input type="text" name="name" required></label>
-            <label>tipo destino <input type="text" name="tipo_destino" required></label>
+            <label>tipo destino <input type="text" name="target" required></label>
             <fieldset class="metareflist">
                 <legend>metadata <a class="add_metaref" href="#">+</a></legend>
             </fieldset>
